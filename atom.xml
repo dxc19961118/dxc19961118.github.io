@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
+  <title>Hexo For Dxc</title>
   
   
   <link href="http://example.com/atom.xml" rel="self"/>
@@ -10,7 +10,7 @@
   <id>http://example.com/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>Dxc</name>
     
   </author>
   
@@ -58,11 +58,11 @@
   </entry>
   
   <entry>
-    <title>hexo</title>
-    <link href="http://example.com/post/hexo.html"/>
-    <id>http://example.com/post/hexo.html</id>
+    <title>hexo部署</title>
+    <link href="http://example.com/post/hexo%E9%83%A8%E7%BD%B2.html"/>
+    <id>http://example.com/post/hexo%E9%83%A8%E7%BD%B2.html</id>
     <published>2023-05-04T14:09:53.000Z</published>
-    <updated>2023-05-04T15:18:50.302Z</updated>
+    <updated>2023-08-10T15:05:25.590Z</updated>
     
     <content type="html"><![CDATA[<h2 id="文章更新"><a href="#文章更新" class="headerlink" title="文章更新"></a>文章更新</h2><p>使用typora进行编辑，保存之后，执行以下命令：</p><pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">hexo g # 生成静态文件hexo s # 通过启动本地服务器，预览文章效果hexo d # 部署到github中，更新网页端的内容</code></pre><p>过一两分刷新自己的博客网址就会发现内容已经更新了。</p><h2 id="主题更换"><a href="#主题更换" class="headerlink" title="主题更换"></a>主题更换</h2><p><a href="https://hexo.io/themes/">Themes | Hexo</a></p>]]></content>
     
@@ -71,26 +71,6 @@
       
     <summary type="html">&lt;h2 id=&quot;文章更新&quot;&gt;&lt;a href=&quot;#文章更新&quot; class=&quot;headerlink&quot; title=&quot;文章更新&quot;&gt;&lt;/a&gt;文章更新&lt;/h2&gt;&lt;p&gt;使用typora进行编辑，保存之后，执行以下命令：&lt;/p&gt;
 &lt;pre class=&quot;line-numbers languag</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://example.com/post/hello-world.html"/>
-    <id>http://example.com/post/hello-world.html</id>
-    <published>2023-05-04T14:08:19.366Z</published>
-    <updated>2023-05-04T14:08:19.366Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new &quot;My New Post&quot;</code></pre><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server</code></pre><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate</code></pre><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy</code></pre><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for</summary>
       
     
     

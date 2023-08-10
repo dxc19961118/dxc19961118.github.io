@@ -1,5 +1,4 @@
+http://example.com/post/hexo%E9%83%A8%E7%BD%B2.html
 http://example.com/post/%E4%B8%87%E7%89%A9%E8%87%AA%E7%84%B6%E7%94%9F%E9%95%BF.html
 http://example.com/post/Python%20%E4%B9%8B%E7%A6%85.html
-http://example.com/post/hexo.html
-http://example.com/post/hello-world.html
 http://example.com/
