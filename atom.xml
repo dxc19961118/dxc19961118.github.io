@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-05-04T15:23:55.359Z</updated>
+  <updated>2023-08-11T14:36:30.011Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,43 +17,74 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Python 之禅</title>
-    <link href="http://example.com/post/Python%20%E4%B9%8B%E7%A6%85.html"/>
-    <id>http://example.com/post/Python%20%E4%B9%8B%E7%A6%85.html</id>
-    <published>2023-05-04T14:09:53.000Z</published>
-    <updated>2023-05-04T15:23:55.359Z</updated>
+    <title>人脉如何建立</title>
+    <link href="http://example.com/post/%E5%BB%BA%E7%AB%8B%E4%BA%BA%E8%84%89%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F.html"/>
+    <id>http://example.com/post/%E5%BB%BA%E7%AB%8B%E4%BA%BA%E8%84%89%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F.html</id>
+    <published>2023-08-11T11:09:53.000Z</published>
+    <updated>2023-08-11T14:36:30.011Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="by-Tim-Peters"><a href="#by-Tim-Peters" class="headerlink" title="by Tim Peters"></a>by Tim Peters</h2><p>优美胜于丑陋。<br>明了胜于晦涩。<br>简洁胜于复杂。<br>复杂胜于凌乱。<br>扁平胜于嵌套。<br>宽松胜于紧凑。<br>可读性很重要。<br>即便是特例，也不可违背这些规则。<br>不要捕获所有错误，除非你确定需要这样做。<br>如果存在多种可能，不要猜测。<br>通常只有唯一一种是最佳的解决方案。<br>虽然这并不容易，因为你不是 Python 之父。<br>做比不做要好，但不假思索就动手还不如不做。<br>如果你的方案很难懂，那肯定不是一个好方案，反之亦然。<br>命名空间非常有用，应当多加利用。</p>]]></content>
+    <content type="html"><![CDATA[<h3 id="1-参加行业活动"><a href="#1-参加行业活动" class="headerlink" title="1.参加行业活动"></a>1.参加行业活动</h3><p>一些商业发展组织与行业机构常常举办大会、研讨会、行业展览等活动。通过参加相关的社团、俱乐部、志愿者活动或专业协会，寻找志同道合的人士和团体。 积极分享经验和见解，并主动向他人介绍自己。这样不仅能与行业发展保持同步，还能巩固自己在专业社区中的地位，利用这些活动建立有意义的联系是行动的关键。 </p><h3 id="2-利用社交网络"><a href="#2-利用社交网络" class="headerlink" title="2.利用社交网络"></a>2.利用社交网络</h3><p>不论是社交软件还是专业求职类软件，都是在线交流的好平台。参加相关话题的讨论、加入感兴趣的群组，发表自己独特的见解，展示自己的专业知识，可以提高个人知名度和可信度。随着时间的推移，个人影响范围也随之扩大。 </p><h3 id="3-利用现有人脉"><a href="#3-利用现有人脉" class="headerlink" title="3.利用现有人脉"></a>3.利用现有人脉</h3><p>根据六度分离理论（Six Degrees of Separation），地球上任意两个人之间的关系不超过六个人。所以，你与行业大牛之间，并非遥不可及！ 通过熟人转介绍认识朋友的朋友们，是扩大自己人际关系的一个简单方法。为什么不开始挖掘现有的关系呢?机会总是留给有准备的人。 </p><h3 id="4-维护巩固关系"><a href="#4-维护巩固关系" class="headerlink" title="4.维护巩固关系"></a>4.维护巩固关系</h3><p>人脉关系的巩固需要长期的维护。与他人保持定期联系，邀请他们参加社交活动或咖啡会议，分享您的进展和成就并关心对方的事务。通过积极地与他人保持联系，可以建立更加牢固的人际关系。</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;h2 id=&quot;by-Tim-Peters&quot;&gt;&lt;a href=&quot;#by-Tim-Peters&quot; class=&quot;headerlink&quot; title=&quot;by Tim Peters&quot;&gt;&lt;/a&gt;by Tim Peters&lt;/h2&gt;&lt;p&gt;优美胜于丑陋。&lt;br&gt;明了胜于晦涩。&lt;br&gt;简洁胜于</summary>
+    <summary type="html">&lt;h3 id=&quot;1-参加行业活动&quot;&gt;&lt;a href=&quot;#1-参加行业活动&quot; class=&quot;headerlink&quot; title=&quot;1.参加行业活动&quot;&gt;&lt;/a&gt;1.参加行业活动&lt;/h3&gt;&lt;p&gt;一些商业发展组织与行业机构常常举办大会、研讨会、行业展览等活动。通过参加相关的社团、俱乐部、</summary>
       
     
     
     
+    <category term="综合" scheme="http://example.com/categories/%E7%BB%BC%E5%90%88/"/>
+    
+    
+    <category term="桶哥" scheme="http://example.com/tags/%E6%A1%B6%E5%93%A5/"/>
     
   </entry>
   
   <entry>
-    <title>hexo部署</title>
-    <link href="http://example.com/post/hexo%E9%83%A8%E7%BD%B2.html"/>
-    <id>http://example.com/post/hexo%E9%83%A8%E7%BD%B2.html</id>
-    <published>2023-05-04T14:09:53.000Z</published>
-    <updated>2023-08-10T15:05:25.590Z</updated>
+    <title>人生真相</title>
+    <link href="http://example.com/post/%E4%BA%BA%E7%94%9F%E7%9C%9F%E7%9B%B8.html"/>
+    <id>http://example.com/post/%E4%BA%BA%E7%94%9F%E7%9C%9F%E7%9B%B8.html</id>
+    <published>2023-08-11T11:09:53.000Z</published>
+    <updated>2023-08-11T14:59:28.383Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="文章更新"><a href="#文章更新" class="headerlink" title="文章更新"></a>文章更新</h2><p>使用typora进行编辑，保存之后，执行以下命令：</p><pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">hexo g # 生成静态文件hexo s # 通过启动本地服务器，预览文章效果hexo d # 部署到github中，更新网页端的内容</code></pre><p>过一两分刷新自己的博客网址就会发现内容已经更新了。</p><h2 id="主题更换"><a href="#主题更换" class="headerlink" title="主题更换"></a>主题更换</h2><p><a href="https://hexo.io/themes/">Themes | Hexo</a></p>]]></content>
+    <content type="html"><![CDATA[<p>成长是一个逐渐被经验捆缚的过程，<br>经验让人们不容易被蛊惑，<br>也让人们逐渐认清自己的边界，<br>知道自己不是无所不能，<br>知道一腔热情并不值钱，<br>但也知道世界上有比理想主义<br>更重要、更基本的东西。<br>一边狼狈着，一边温柔着。- 全嘻嘻</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;h2 id=&quot;文章更新&quot;&gt;&lt;a href=&quot;#文章更新&quot; class=&quot;headerlink&quot; title=&quot;文章更新&quot;&gt;&lt;/a&gt;文章更新&lt;/h2&gt;&lt;p&gt;使用typora进行编辑，保存之后，执行以下命令：&lt;/p&gt;
-&lt;pre class=&quot;line-numbers languag</summary>
+    <summary type="html">&lt;p&gt;成长是一个逐渐被经验捆缚的过程，&lt;br&gt;经验让人们不容易被蛊惑，&lt;br&gt;也让人们逐渐认清自己的边界，&lt;br&gt;知道自己不是无所不能，&lt;br&gt;知道一腔热情并不值钱，&lt;br&gt;但也知道世界上有比理想主义&lt;br&gt;更重要、更基本的东西。&lt;br&gt;一边狼狈着，一边温柔着。- 全嘻嘻&lt;/p&gt;</summary>
       
     
     
     
+    <category term="成长" scheme="http://example.com/categories/%E6%88%90%E9%95%BF/"/>
+    
+    
+    <category term="全嘻嘻" scheme="http://example.com/tags/%E5%85%A8%E5%98%BB%E5%98%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>生活是很复杂的</title>
+    <link href="http://example.com/post/%E7%94%9F%E6%B4%BB%E6%98%AF%E5%BE%88%E5%A4%8D%E6%9D%82%E7%9A%84.html"/>
+    <id>http://example.com/post/%E7%94%9F%E6%B4%BB%E6%98%AF%E5%BE%88%E5%A4%8D%E6%9D%82%E7%9A%84.html</id>
+    <published>2023-08-11T11:09:53.000Z</published>
+    <updated>2023-08-11T14:59:54.764Z</updated>
+    
+    <content type="html"><![CDATA[<p>我一直想跟大家探讨的是，<br>生活是很复杂的，<br>好的没那么好，坏的也没那么坏，<br>你以为的巅峰往往是陷阱，<br>而人生的绝望之谷也常常会拥抱你。<br>只要我们还活着，<br>更好的和更坏的就都会发生，<br>不要傲慢，<br>也不要失去希望。- 全嘻嘻</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;我一直想跟大家探讨的是，&lt;br&gt;生活是很复杂的，&lt;br&gt;好的没那么好，坏的也没那么坏，&lt;br&gt;你以为的巅峰往往是陷阱，&lt;br&gt;而人生的绝望之谷也常常会拥抱你。&lt;br&gt;只要我们还活着，&lt;br&gt;更好的和更坏的就都会发生，&lt;br&gt;不要傲慢，&lt;br&gt;也不要失去希望。- 全嘻嘻&lt;/p</summary>
+      
+    
+    
+    
+    <category term="成长" scheme="http://example.com/categories/%E6%88%90%E9%95%BF/"/>
+    
+    
+    <category term="全嘻嘻" scheme="http://example.com/tags/%E5%85%A8%E5%98%BB%E5%98%BB/"/>
     
   </entry>
   
@@ -61,20 +92,49 @@
     <title>万物自然生长</title>
     <link href="http://example.com/post/%E4%B8%87%E7%89%A9%E8%87%AA%E7%84%B6%E7%94%9F%E9%95%BF.html"/>
     <id>http://example.com/post/%E4%B8%87%E7%89%A9%E8%87%AA%E7%84%B6%E7%94%9F%E9%95%BF.html</id>
-    <published>2023-05-04T14:09:53.000Z</published>
-    <updated>2023-05-04T15:24:24.471Z</updated>
+    <published>2023-08-04T14:09:53.000Z</published>
+    <updated>2023-08-11T14:38:15.855Z</updated>
     
-    <content type="html"><![CDATA[<p>不管你曾经遭遇过什么，<br>现在正在遭遇什么，给自己时间，<br>在最没有希望、在最窒息的夜晚，<br>给自己时间。<br>因为在时间中，万物自然生长，<br>你也一样。<br>——刘阳</p>]]></content>
+    <content type="html"><![CDATA[<p>不管你曾经遭遇过什么，<br>现在正在遭遇什么，给自己时间，<br>在最没有希望、在最窒息的夜晚，<br>给自己时间。<br>因为在时间中，万物自然生长，<br>你也一样。– 刘阳</p>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;不管你曾经遭遇过什么，&lt;br&gt;现在正在遭遇什么，给自己时间，&lt;br&gt;在最没有希望、在最窒息的夜晚，&lt;br&gt;给自己时间。&lt;br&gt;因为在时间中，万物自然生长，&lt;br&gt;你也一样。&lt;br&gt;——刘阳&lt;/p&gt;
+    <summary type="html">&lt;p&gt;不管你曾经遭遇过什么，&lt;br&gt;现在正在遭遇什么，给自己时间，&lt;br&gt;在最没有希望、在最窒息的夜晚，&lt;br&gt;给自己时间。&lt;br&gt;因为在时间中，万物自然生长，&lt;br&gt;你也一样。– 刘阳&lt;/p&gt;
 </summary>
       
     
     
     
+    <category term="成长" scheme="http://example.com/categories/%E6%88%90%E9%95%BF/"/>
+    
+    
+    <category term="杂谈" scheme="http://example.com/tags/%E6%9D%82%E8%B0%88/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hexo</title>
+    <link href="http://example.com/post/hexo.html"/>
+    <id>http://example.com/post/hexo.html</id>
+    <published>2023-08-04T14:09:53.000Z</published>
+    <updated>2023-08-11T14:48:19.630Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="部署更新"><a href="#部署更新" class="headerlink" title="部署更新"></a>部署更新</h2><p>依次执行以下命令：</p><pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">hexo g # 生成静态文件hexo s # 通过启动本地服务器，预览文章效果hexo d # 部署到github中，更新网页端的内容</code></pre><p>过一两分刷新自己的博客网址就会发现内容已经更新了。</p><p><strong>hexo-admin</strong></p><p><a href="https://github.com/jaredly/hexo-admin">jaredly&#x2F;hexo-admin: An Admin Interface for Hexo (github.com)</a></p><pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">npm install --save hexo-adminhexo server -dopen http:&#x2F;&#x2F;localhost:4000&#x2F;admin&#x2F;</code></pre><h2 id="主题更换"><a href="#主题更换" class="headerlink" title="主题更换"></a>主题更换</h2><p><a href="https://hexo.io/themes/">Themes | Hexo</a></p><h2 id="Aurora文档"><a href="#Aurora文档" class="headerlink" title="Aurora文档"></a>Aurora文档</h2><p><a href="https://aurora.tridiamond.tech/zh/">Home | Hexo Aurora 使用文档 (tridiamond.tech)</a></p><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><a href="https://zhuanlan.zhihu.com/p/598569217?utm_id=0">hexo+github搭建博客、修改主题、更新内容及解决图片无法加载 - 知乎 (zhihu.com)</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;部署更新&quot;&gt;&lt;a href=&quot;#部署更新&quot; class=&quot;headerlink&quot; title=&quot;部署更新&quot;&gt;&lt;/a&gt;部署更新&lt;/h2&gt;&lt;p&gt;依次执行以下命令：&lt;/p&gt;
+&lt;pre class=&quot;line-numbers language-powershell&quot; da</summary>
+      
+    
+    
+    
+    <category term="博客" scheme="http://example.com/categories/%E5%8D%9A%E5%AE%A2/"/>
+    
+    
+    <category term="hexo" scheme="http://example.com/tags/hexo/"/>
     
   </entry>
   
