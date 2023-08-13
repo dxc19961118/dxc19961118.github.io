@@ -1,8 +1,8 @@
-http://example.com/post/%E4%BA%BA%E7%94%9F%E7%9C%9F%E7%9B%B8.html
-http://example.com/post/%E4%B8%87%E7%89%A9%E8%87%AA%E7%84%B6%E7%94%9F%E9%95%BF.html
-http://example.com/post/%E5%BB%BA%E7%AB%8B%E4%BA%BA%E8%84%89%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F.html
-http://example.com/post/%E7%94%9F%E6%B4%BB%E6%98%AF%E5%BE%88%E5%A4%8D%E6%9D%82%E7%9A%84.html
 http://example.com/post/hexo.html
+http://example.com/post/%E7%94%9F%E6%B4%BB%E6%98%AF%E5%BE%88%E5%A4%8D%E6%9D%82%E7%9A%84.html
+http://example.com/post/%E4%B8%87%E7%89%A9%E8%87%AA%E7%84%B6%E7%94%9F%E9%95%BF.html
+http://example.com/post/%E4%BA%BA%E7%94%9F%E7%9C%9F%E7%9B%B8.html
+http://example.com/post/%E5%BB%BA%E7%AB%8B%E4%BA%BA%E8%84%89%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F.html
 http://example.com/404.html
 http://example.com/about/index.html
 http://example.com/
