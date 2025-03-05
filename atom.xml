@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-09-13T14:09:53.000Z</updated>
+  <updated>2025-02-23T14:09:53.000Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JVM堆内存溢出</title>
+    <link href="http://example.com/post/JVM%E5%A0%86%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93.html"/>
+    <id>http://example.com/post/JVM%E5%A0%86%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E7%9F%A5%E8%AF%86%E6%80%BB%E7%BB%93.html</id>
+    <published>2025-02-23T14:09:53.000Z</published>
+    <updated>2025-02-23T14:09:53.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="JVM堆内存溢出知识总结"><a href="#JVM堆内存溢出知识总结" class="headerlink" title="JVM堆内存溢出知识总结"></a><strong>JVM堆内存溢出知识总结</strong></h1><hr><h3 id="一、常见内存溢出类型"><a href="#一、常见内存溢出类型" class="headerlink" title="一、常见内存溢出类型"></a><strong>一、常见内存溢出类型</strong></h3><ol><li><p><strong>堆内存溢出（Heap OOM）</strong><br>• <strong>触发原因</strong>：对象过多且无法被GC回收（内存泄漏、大对象未释放等）。<br>• <strong>异常类型</strong>：<br>  ◦ **<code>OutOfMemoryError: Java heap space</code>**：堆内存耗尽，无法分配新对象。<br>  ◦ **<code>OutOfMemoryError: GC overhead limit exceeded</code>**：GC耗时超过98%且回收内存不足2%（Hotspot VM策略，避免无效GC）。  </p></li><li><p><strong>元空间内存溢出（Metaspace OOM）</strong><br>• <strong>触发原因</strong>：加载类过多（动态生成类、类加载器未清理）。<br>• <strong>异常信息</strong>：<code>java.lang.OutOfMemoryError: Metaspace</code>（JDK8后替代永久代）。<br>• <strong>特点</strong>：通常直接导致Java进程崩溃。</p></li></ol><hr><h3 id="二、溢出场景影响"><a href="#二、溢出场景影响" class="headerlink" title="二、溢出场景影响"></a><strong>二、溢出场景影响</strong></h3><p>• <strong>Java Heap OOM</strong>：<br>  • 若在Web接口请求中触发且全局异常捕获未处理OOM，进程可能存活但无法处理后续请求，进入不稳定状态。<br>• <strong>Metaspace OOM</strong>：<br>  • 进程通常直接崩溃。</p><hr><h3 id="三、应对OOM的解决方案"><a href="#三、应对OOM的解决方案" class="headerlink" title="三、应对OOM的解决方案"></a><strong>三、应对OOM的解决方案</strong></h3><ol><li><p><strong>监控与告警</strong><br>• 使用工具（VisualVM、Prometheus + JMX Exporter）监控JVM状态，关注GC日志和内存使用率。  </p></li><li><p><strong>优化与修复</strong><br>• <strong>生成Heap Dump</strong>：<br>  ◦ 启动参数 <code>-XX:+HeapDumpOnOutOfMemoryError</code>（自动生成Dump文件）。<br>  ◦ 手动生成：<code>jmap -dump:format=b file=&lt;文件名.hprof&gt; &lt;pid&gt;</code>。<br>• <strong>分析Dump文件</strong>：<br>  ◦ 工具：MAT（Eclipse Memory Analyzer）、VisualVM。<br>• <strong>检查内存泄漏</strong>：如未关闭资源、静态集合缓存等。  </p></li><li><p><strong>配置调优</strong><br>• <strong>堆内存</strong>：调整 <code>-Xmx</code>（最大堆）、<code>-Xms</code>（初始堆）。<br>• <strong>元空间</strong>：限制大小 <code>-XX:MaxMetaspaceSize</code>。<br>• <strong>快速失败机制</strong>：启用 <code>-XX:+ExitOnOutOfMemoryError</code> 避免僵尸进程。</p></li></ol><hr><h3 id="四、核心要点"><a href="#四、核心要点" class="headerlink" title="四、核心要点"></a><strong>四、核心要点</strong></h3><p>• <strong>堆内存溢出</strong>关注对象分配与回收效率，<strong>元空间溢出</strong>关注类加载管理。<br>• <strong>Heap Dump分析</strong>是定位内存泄漏的关键步骤。<br>• <strong>配置调优需结合场景</strong>（如避免过度限制Metaspace动态扩展）。  </p><p>通过监控、分析、调优三步法，可有效预防和解决JVM内存溢出问题。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;JVM堆内存溢出知识总结&quot;&gt;&lt;a href=&quot;#JVM堆内存溢出知识总结&quot; class=&quot;headerlink&quot; title=&quot;JVM堆内存溢出知识总结&quot;&gt;&lt;/a&gt;&lt;strong&gt;JVM堆内存溢出知识总结&lt;/strong&gt;&lt;/h1&gt;&lt;hr&gt;
+&lt;h3 id=&quot;一、常</summary>
+      
+    
+    
+    
+    <category term="编程" scheme="http://example.com/categories/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+    <category term="JVM" scheme="http://example.com/tags/JVM/"/>
+    
+  </entry>
   
   <entry>
     <title>线上JVM OOM问题排查、解决</title>
@@ -470,30 +495,6 @@
       
       
     <summary type="html">&lt;h1 id=&quot;GitHub怎么用&quot;&gt;&lt;a href=&quot;#GitHub怎么用&quot; class=&quot;headerlink&quot; title=&quot;GitHub怎么用&quot;&gt;&lt;/a&gt;GitHub怎么用&lt;/h1&gt;&lt;h2 id=&quot;GitHub·能干啥&quot;&gt;&lt;a href=&quot;#GitHub·能干啥&quot; cla</summary>
-      
-    
-    
-    
-    <category term="编程" scheme="http://example.com/categories/%E7%BC%96%E7%A8%8B/"/>
-    
-    
-    <category term="Java" scheme="http://example.com/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>React基础入门</title>
-    <link href="http://example.com/post/React%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html"/>
-    <id>http://example.com/post/React%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</id>
-    <published>2021-04-28T14:09:53.000Z</published>
-    <updated>2021-04-28T14:09:53.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>React基础入门笔记四篇 配合视频 使用效果更佳<br>初识入门：<a href="https://juejin.cn/post/7015185218638184462">https://juejin.cn/post/7015185218638184462</a><br>组件编程：<a href="https://juejin.cn/post/7015402441298411533">https://juejin.cn/post/7015402441298411533</a><br>生命周期：<a href="https://juejin.cn/post/7015766065183621156">https://juejin.cn/post/7015766065183621156</a><br>脚手架使用：<a href="https://juejin.cn/post/7016278634348412964">https://juejin.cn/post/7016278634348412964</a></p><p>react学习01: <a href="https://docs.qq.com/doc/DSG1jdUJtQ3FYR1V1">https://docs.qq.com/doc/DSG1jdUJtQ3FYR1V1</a><br>react学习02: <a href="https://docs.qq.com/doc/DSGhGZk9PUm1KVldv">https://docs.qq.com/doc/DSGhGZk9PUm1KVldv</a></p><p><a href="https://brucecai55520.gitee.io/my-notes/#/">FENotes (gitee.io)</a></p><p><a href="https://brucecai55520.gitee.io/bruceblog/notes/react/react-router6.html">React Router 6 | BruceBlog (gitee.io)</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;React基础入门笔记四篇 配合视频 使用效果更佳&lt;br&gt;初识入门：&lt;a href=&quot;https://juejin.cn/post/7015185218638184462&quot;&gt;https://juejin.cn/post/7015185218638184462&lt;/a&gt;&lt;br&gt;</summary>
       
     
     
