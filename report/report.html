@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Claude Code 使用洞察报告</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Loading 遮罩 */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      margin-top: 16px;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f8fafc; color: #334155; line-height: 1.65; padding: 48px 24px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 32px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+    h2 { font-size: 20px; font-weight: 600; color: #0f172a; margin-top: 48px; margin-bottom: 16px; }
+    .subtitle { color: #64748b; font-size: 15px; margin-bottom: 32px; }
+    .nav-toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 32px 0; padding: 16px; background: white; border-radius: 8px; border: 1px solid #e2e8f0; }
+    .nav-toc a { font-size: 12px; color: #64748b; text-decoration: none; padding: 6px 12px; border-radius: 6px; background: #f1f5f9; transition: all 0.15s; }
+    .nav-toc a:hover { background: #e2e8f0; color: #334155; }
+    .stats-row { display: flex; gap: 24px; margin-bottom: 40px; padding: 20px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 24px; font-weight: 700; color: #0f172a; }
+    .stat-label { font-size: 11px; color: #64748b; text-transform: uppercase; }
+    .at-a-glance { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #f59e0b; border-radius: 12px; padding: 20px 24px; margin-bottom: 32px; }
+    .glance-title { font-size: 16px; font-weight: 700; color: #92400e; margin-bottom: 16px; }
+    .glance-sections { display: flex; flex-direction: column; gap: 12px; }
+    .glance-section { font-size: 14px; color: #78350f; line-height: 1.6; }
+    .glance-section strong { color: #92400e; }
+    .see-more { color: #b45309; text-decoration: none; font-size: 13px; white-space: nowrap; }
+    .see-more:hover { text-decoration: underline; }
+    .project-areas { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .project-area { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; }
+    .area-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .area-name { font-weight: 600; font-size: 15px; color: #0f172a; }
+    .area-count { font-size: 12px; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; }
+    .area-desc { font-size: 14px; color: #475569; line-height: 1.5; }
+    .narrative { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+    .narrative p { margin-bottom: 12px; font-size: 14px; color: #475569; line-height: 1.7; }
+    .key-insight { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 12px 16px; margin-top: 12px; font-size: 14px; color: #166534; }
+    .section-intro { font-size: 14px; color: #64748b; margin-bottom: 16px; }
+    .big-wins { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .big-win { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; }
+    .big-win-title { font-weight: 600; font-size: 15px; color: #166534; margin-bottom: 8px; }
+    .big-win-desc { font-size: 14px; color: #15803d; line-height: 1.5; }
+    .friction-categories { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .friction-category { background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 16px; }
+    .friction-title { font-weight: 600; font-size: 15px; color: #991b1b; margin-bottom: 6px; }
+    .friction-desc { font-size: 13px; color: #7f1d1d; margin-bottom: 10px; }
+    .friction-examples { margin: 0 0 0 20px; font-size: 13px; color: #334155; }
+    .friction-examples li { margin-bottom: 4px; }
+    .claude-md-section { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+    .claude-md-section h3 { font-size: 14px; font-weight: 600; color: #1e40af; margin: 0 0 12px 0; }
+    .claude-md-actions { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #dbeafe; }
+    .copy-all-btn { background: #2563eb; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+    .copy-all-btn:hover { background: #1d4ed8; }
+    .copy-all-btn.copied { background: #16a34a; }
+    .claude-md-item { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; padding: 10px 0; border-bottom: 1px solid #dbeafe; }
+    .claude-md-item:last-child { border-bottom: none; }
+    .cmd-checkbox { margin-top: 2px; }
+    .cmd-code { background: white; padding: 8px 12px; border-radius: 4px; font-size: 12px; color: #1e40af; border: 1px solid #bfdbfe; font-family: monospace; display: block; white-space: pre-wrap; word-break: break-word; flex: 1; }
+    .cmd-why { font-size: 12px; color: #64748b; width: 100%; padding-left: 24px; margin-top: 4px; }
+    .features-section, .patterns-section { display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+    .feature-card { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 16px; }
+    .pattern-card { background: #f0f9ff; border: 1px solid #7dd3fc; border-radius: 8px; padding: 16px; }
+    .feature-title, .pattern-title { font-weight: 600; font-size: 15px; color: #0f172a; margin-bottom: 6px; }
+    .feature-oneliner { font-size: 14px; color: #475569; margin-bottom: 8px; }
+    .pattern-summary { font-size: 14px; color: #475569; margin-bottom: 8px; }
+    .feature-why, .pattern-detail { font-size: 13px; color: #334155; line-height: 1.5; }
+    .feature-examples { margin-top: 12px; }
+    .feature-example { padding: 8px 0; border-top: 1px solid #d1fae5; }
+    .feature-example:first-child { border-top: none; }
+    .example-desc { font-size: 13px; color: #334155; margin-bottom: 6px; }
+    .example-code-row { display: flex; align-items: flex-start; gap: 8px; }
+    .example-code { flex: 1; background: #f1f5f9; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #334155; overflow-x: auto; white-space: pre-wrap; }
+    .copyable-prompt-section { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0; }
+    .copyable-prompt-row { display: flex; align-items: flex-start; gap: 8px; }
+    .copyable-prompt { flex: 1; background: #f8fafc; padding: 10px 12px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #334155; border: 1px solid #e2e8f0; white-space: pre-wrap; line-height: 1.5; }
+    .feature-code { background: #f8fafc; padding: 12px; border-radius: 6px; margin-top: 12px; border: 1px solid #e2e8f0; display: flex; align-items: flex-start; gap: 8px; }
+    .feature-code code { flex: 1; font-family: monospace; font-size: 12px; color: #334155; white-space: pre-wrap; }
+    .pattern-prompt { background: #f8fafc; padding: 12px; border-radius: 6px; margin-top: 12px; border: 1px solid #e2e8f0; }
+    .pattern-prompt code { font-family: monospace; font-size: 12px; color: #334155; display: block; white-space: pre-wrap; margin-bottom: 8px; }
+    .prompt-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
+    .copy-btn { background: #e2e8f0; border: none; border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer; color: #475569; flex-shrink: 0; }
+    .copy-btn:hover { background: #cbd5e1; }
+    .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 24px 0; }
+    .chart-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; }
+    .chart-title { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 12px; }
+    .bar-row { display: flex; align-items: center; margin-bottom: 6px; }
+    .bar-label { width: 100px; font-size: 11px; color: #475569; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bar-track { flex: 1; height: 6px; background: #f1f5f9; border-radius: 3px; margin: 0 8px; }
+    .bar-fill { height: 100%; border-radius: 3px; }
+    .bar-value { width: 28px; font-size: 11px; font-weight: 500; color: #64748b; text-align: right; }
+    .empty { color: #94a3b8; font-size: 13px; }
+    .horizon-section { display: flex; flex-direction: column; gap: 16px; }
+    .horizon-card { background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%); border: 1px solid #c4b5fd; border-radius: 8px; padding: 16px; }
+    .horizon-title { font-weight: 600; font-size: 15px; color: #5b21b6; margin-bottom: 8px; }
+    .horizon-possible { font-size: 14px; color: #334155; margin-bottom: 10px; line-height: 1.5; }
+    .horizon-tip { font-size: 13px; color: #6b21a8; background: rgba(255,255,255,0.6); padding: 8px 12px; border-radius: 4px; }
+    .feedback-header { margin-top: 48px; color: #64748b; font-size: 16px; }
+    .feedback-intro { font-size: 13px; color: #94a3b8; margin-bottom: 16px; }
+    .feedback-section { margin-top: 16px; }
+    .feedback-section h3 { font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 12px; }
+    .feedback-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .feedback-card.team-card { background: #eff6ff; border-color: #bfdbfe; }
+    .feedback-card.model-card { background: #faf5ff; border-color: #e9d5ff; }
+    .feedback-title { font-weight: 600; font-size: 14px; color: #0f172a; margin-bottom: 6px; }
+    .feedback-detail { font-size: 13px; color: #475569; line-height: 1.5; }
+    .feedback-evidence { font-size: 12px; color: #64748b; margin-top: 8px; }
+    .fun-ending { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 1px solid #fbbf24; border-radius: 12px; padding: 24px; margin-top: 40px; text-align: center; }
+    .fun-headline { font-size: 18px; font-weight: 600; color: #78350f; margin-bottom: 8px; }
+    .fun-detail { font-size: 14px; color: #92400e; }
+    .collapsible-section { margin-top: 16px; }
+    .collapsible-header { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
+    .collapsible-header h3 { margin: 0; font-size: 14px; font-weight: 600; color: #475569; }
+    .collapsible-arrow { font-size: 12px; color: #94a3b8; transition: transform 0.2s; }
+    .collapsible-content { display: none; padding-top: 16px; }
+    .collapsible-content.open { display: block; }
+    .collapsible-header.open .collapsible-arrow { transform: rotate(90deg); }
+    @media (max-width: 640px) { .charts-row { grid-template-columns: 1fr; } .stats-row { justify-content: center; } }
+
+    /* 返回按钮 */
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      padding: 10px 20px;
+      background: #ffffff;
+      color: #6366f1;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      border: 1px solid #e8e6e1;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .back-btn:hover {
+      background: #6366f1;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    }
+
+    .back-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+  </style>
+</head>
+<body>
+  <!-- 返回按钮 -->
+  <a href="/apps/claude-code-prompt/index.html" class="back-btn" title="返回 Claude Code 提示台">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    返回提示台
+  </a>
+
+  <!-- Loading 遮罩 -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">正在加载...</div>
+  </div>
+
+  <div class="container">
+    <h1>Claude Code 使用洞察报告</h1>
+    <p class="subtitle">69 个活跃会话（累计 99 个）| 共 953 条消息 | 2026-06-11 至 2026-07-09</p>
+
+
+    <div class="at-a-glance">
+      <div class="glance-title">全景概览</div>
+      <div class="glance-sections">
+        <div class="glance-section"><strong>亮点表现：</strong>你在 Java 后端、uni-app 小程序、React 前端的全栈开发中游刃有余。面对复杂的 API 集成与环境配置问题，你展现出的架构意识和持之以恒的迭代调试能力，令人印象深刻。<a href="#section-wins" class="see-more">亮眼表现 →</a></div>
+        <div class="glance-section"><strong>值得改进：</strong>Claude 有时会急于动手写代码，而未能先核实 API 结构与框架行为，导致字段映射、时区逻辑等方面出现反复返工。若在动手之前先要求 Claude 简要分析相关配置或文档，便可显著减少此类循环。<a href="#section-friction" class="see-more">问题所在 →</a></div>
+        <div class="glance-section"><strong>立竿见影的建议：</strong>创建一个 Custom Skill，为调试制定标准化检查清单，从而避免仓促实现、确保先验证上下文。此外，建议为你常用的外部 API（如 PDD/JD）配置 MCP Server，以提升集成调试效率、减少解析错误。<a href="#section-features" class="see-more">推荐功能 →</a></div>
+        <div class="glance-section"><strong>未来可期：</strong>随着模型能力的提升，自主式测试驱动调试将指日可待：Agent 会自动编写失败用例，并持续迭代修复直至测试通过，全程无需人工介入。你还将能够部署并行的 Sub-Agent，同时集成多个外部 API，彻底打破当前串行流程的瓶颈。<a href="#section-horizon" class="see-more">前沿展望 →</a></div>
+      </div>
+    </div>
+
+
+    <nav class="nav-toc">
+      <a href="#section-work">工作内容</a>
+      <a href="#section-usage">使用方式</a>
+      <a href="#section-wins">亮眼表现</a>
+      <a href="#section-friction">问题所在</a>
+      <a href="#section-features">推荐功能</a>
+      <a href="#section-patterns">使用模式</a>
+      <a href="#section-horizon">前沿展望</a>
+      <a href="#section-feedback">团队反馈</a>
+    </nav>
+
+    <div class="stats-row">
+      <div class="stat"><div class="stat-value">953</div><div class="stat-label">消息数</div></div>
+      <div class="stat"><div class="stat-value">+57,492/-9,334</div><div class="stat-label">代码行数</div></div>
+      <div class="stat"><div class="stat-value">504</div><div class="stat-label">文件数</div></div>
+      <div class="stat"><div class="stat-value">19</div><div class="stat-label">活跃天数</div></div>
+      <div class="stat"><div class="stat-value">50.2</div><div class="stat-label">日均消息</div></div>
+    </div>
+
+
+    <h2 id="section-work">工作内容</h2>
+    <div class="project-areas">
+
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">电商与订单管理</span>
+            <span class="area-count">约 18 个会话</span>
+          </div>
+          <div class="area-desc">在 uni-app 小程序与后台管理系统上投入大量精力，涵盖微信支付集成、退款流程，以及与 PDD/JD 的联盟 API 对接。借助 Claude Code 调试了复杂的数据映射问题，修复了时区与排序相关 Bug，并在前后端同步实现了订单详情页面。</div>
+        </div>
+
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Hexo 博客定制与内容维护</span>
+            <span class="area-count">约 12 个会话</span>
+          </div>
+          <div class="area-desc">专注于博客主题样式重构、路由与部署问题修复，以及内容创作管理。Claude 协助完成了 CSS 重构、解决了 Hexo 特有的重定向脚本问题，并对 Markdown 文章进行了批量格式与摘要调整。</div>
+        </div>
+
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Claude Code 工具链与环境配置</span>
+            <span class="area-count">约 15 个会话</span>
+          </div>
+          <div class="area-desc">对开发环境本身进行配置，包括安装 claude-hud、understand-anything 等插件，搭建 MCP Server，以及优化 CLAUDE.md。Claude 帮助诊断了路径配置错误、恢复了缺失的插件，并编写了自愈脚本以提升工具稳定性。</div>
+        </div>
+
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">Java 后端与 API 集成</span>
+            <span class="area-count">约 10 个会话</span>
+          </div>
+          <div class="area-desc">重度 Java 开发，涉及 Spring Boot Actuator 端点、数据库 TypeHandler 修复，以及统一的购物搜索 API。借助 Claude 重构了价格配置逻辑，修复了登录流程中的唯一键约束冲突，并优化了 Embedding 超时的错误日志输出。</div>
+        </div>
+
+        <div class="project-area">
+          <div class="area-header">
+            <span class="area-name">前端 UI/UX 与 React 开发</span>
+            <span class="area-count">约 8 个会话</span>
+          </div>
+          <div class="area-desc">使用 React、TDesign 设计令牌以及 VANGUARD 落地页构建并打磨用户界面。Claude 完成了带本地化支持的 Hero 区域、在预约界面禁用了过去的时间段，并根据你对布局与样式的反馈进行了多轮迭代调整。</div>
+        </div>
+
+    </div>
+
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">需求分布</div>
+        <div class="bar-row">
+        <div class="bar-label">问题调试</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#2563eb"></div></div>
+        <div class="bar-value">15</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">功能实现</div>
+        <div class="bar-track"><div class="bar-fill" style="width:93.33333333333333%;background:#2563eb"></div></div>
+        <div class="bar-value">14</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Bug 修复</div>
+        <div class="bar-track"><div class="bar-fill" style="width:80%;background:#2563eb"></div></div>
+        <div class="bar-value">12</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">API 集成调试</div>
+        <div class="bar-track"><div class="bar-fill" style="width:80%;background:#2563eb"></div></div>
+        <div class="bar-value">12</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">缺陷修复</div>
+        <div class="bar-track"><div class="bar-fill" style="width:73.33333333333333%;background:#2563eb"></div></div>
+        <div class="bar-value">11</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">UI/UX 打磨</div>
+        <div class="bar-track"><div class="bar-fill" style="width:73.33333333333333%;background:#2563eb"></div></div>
+        <div class="bar-value">11</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">常用工具 Top</div>
+        <div class="bar-row">
+        <div class="bar-label">Edit</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#0891b2"></div></div>
+        <div class="bar-value">1773</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Read</div>
+        <div class="bar-track"><div class="bar-fill" style="width:98.42075578116187%;background:#0891b2"></div></div>
+        <div class="bar-value">1745</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Bash</div>
+        <div class="bar-track"><div class="bar-fill" style="width:91.42695995487874%;background:#0891b2"></div></div>
+        <div class="bar-value">1621</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Grep</div>
+        <div class="bar-track"><div class="bar-fill" style="width:33.33333333333333%;background:#0891b2"></div></div>
+        <div class="bar-value">591</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Write</div>
+        <div class="bar-track"><div class="bar-fill" style="width:12.690355329949238%;background:#0891b2"></div></div>
+        <div class="bar-value">225</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Glob</div>
+        <div class="bar-track"><div class="bar-fill" style="width:8.23463056965595%;background:#0891b2"></div></div>
+        <div class="bar-value">146</div>
+      </div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">编程语言</div>
+        <div class="bar-row">
+        <div class="bar-label">Java</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#10b981"></div></div>
+        <div class="bar-value">972</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">Markdown</div>
+        <div class="bar-track"><div class="bar-fill" style="width:21.810699588477366%;background:#10b981"></div></div>
+        <div class="bar-value">212</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">TypeScript</div>
+        <div class="bar-track"><div class="bar-fill" style="width:17.48971193415638%;background:#10b981"></div></div>
+        <div class="bar-value">170</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">JSON</div>
+        <div class="bar-track"><div class="bar-fill" style="width:12.345679012345679%;background:#10b981"></div></div>
+        <div class="bar-value">120</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">JavaScript</div>
+        <div class="bar-track"><div class="bar-fill" style="width:11.213991769547325%;background:#10b981"></div></div>
+        <div class="bar-value">109</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">YAML</div>
+        <div class="bar-track"><div class="bar-fill" style="width:8.333333333333332%;background:#10b981"></div></div>
+        <div class="bar-value">81</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">会话类型</div>
+        <div class="bar-row">
+        <div class="bar-label">迭代精修</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">22</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">多任务并行</div>
+        <div class="bar-track"><div class="bar-fill" style="width:81.81818181818183%;background:#8b5cf6"></div></div>
+        <div class="bar-value">18</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">单一任务</div>
+        <div class="bar-track"><div class="bar-fill" style="width:36.36363636363637%;background:#8b5cf6"></div></div>
+        <div class="bar-value">8</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">快速提问</div>
+        <div class="bar-track"><div class="bar-fill" style="width:9.090909090909092%;background:#8b5cf6"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+      </div>
+    </div>
+
+
+    <h2 id="section-usage">使用方式</h2>
+    <div class="narrative">
+      <p>你的工作方式<strong>节奏快、迭代密</strong>，更看重迅速落地，而非事无巨细地预先规划。对 <code>Edit</code> 和 <code>Bash</code> 工具的高频使用，以及相对会话总量较低的提交次数，都表明你将 Claude Code 视作<strong>互动式的结对编程伙伴</strong>，而非批处理器。你常以简洁的指令直接切入调试与功能实现，接受首版结果可能需要打磨。这在许多会话中都有体现——例如你纠正了预订时段比较逻辑（从结束时间改为开始时间），或当 Claude 过度设计（新建数据库字段而非复用已有字段）时及时把它拉回正轨。</p>
+<p>你的交互风格<strong>务实、直接纠偏</strong>。当 Claude 的调查陷入死胡同时，你会毫不犹豫地将其中断——无论是浏览器访问尝试，还是迟迟不出结果的深色模式调研，都是如此。这种做法有时也会带来一些摩擦，尤其是在 Hexo 复杂路由或外部 API 集成的场景下。但你总能用具体的反馈，把对话重新引回正轨。你更看重<strong> tangible 的成果</strong>——真正跑得起来的 UI 组件、修得好的后端 Bug——而不是理论阐述；面对多轮反复的 Bug 代码，你也会一路推进，直至方案成功编译并正确运行。</p>
+      <div class="key-insight"><strong>核心模式：</strong>你习惯于快速的迭代式开发循环，通过直接纠偏与及时打断，引导 Claude 给出实际可用的方案，而非追求一次性完美的实现。</div>
+    </div>
+
+
+    <!-- Response Time Distribution -->
+    <div class="chart-card" style="margin: 24px 0;">
+      <div class="chart-title">用户响应时间分布</div>
+      <div class="bar-row">
+        <div class="bar-label">2-10 秒</div>
+        <div class="bar-track"><div class="bar-fill" style="width:12.083333333333334%;background:#6366f1"></div></div>
+        <div class="bar-value">29</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">10-30 秒</div>
+        <div class="bar-track"><div class="bar-fill" style="width:31.25%;background:#6366f1"></div></div>
+        <div class="bar-value">75</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">30 秒-1 分钟</div>
+        <div class="bar-track"><div class="bar-fill" style="width:44.166666666666664%;background:#6366f1"></div></div>
+        <div class="bar-value">106</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">1-2 分钟</div>
+        <div class="bar-track"><div class="bar-fill" style="width:80%;background:#6366f1"></div></div>
+        <div class="bar-value">192</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">2-5 分钟</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#6366f1"></div></div>
+        <div class="bar-value">240</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">5-15 分钟</div>
+        <div class="bar-track"><div class="bar-fill" style="width:58.75%;background:#6366f1"></div></div>
+        <div class="bar-value">141</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">超过 15 分钟</div>
+        <div class="bar-track"><div class="bar-fill" style="width:17.916666666666668%;background:#6366f1"></div></div>
+        <div class="bar-value">43</div>
+      </div>
+      <div style="font-size: 12px; color: #64748b; margin-top: 8px;">
+        中位数：124.5 秒 &bull; 平均值：252.3 秒
+      </div>
+    </div>
+
+    <!-- Multi-clauding Section (matching Python reference) -->
+    <div class="chart-card" style="margin: 24px 0;">
+      <div class="chart-title">Multi-Clauding（并行会话）</div>
+
+        <div style="display: flex; gap: 24px; margin: 12px 0;">
+          <div style="text-align: center;">
+            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">4</div>
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase;">重叠事件数</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">7</div>
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase;">涉及会话数</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-size: 24px; font-weight: 700; color: #7c3aed;">2%</div>
+            <div style="font-size: 11px; color: #64748b; text-transform: uppercase;">消息占比</div>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: #475569; margin-top: 12px;">
+          你会同时运行多个 Claude Code 会话。当不同会话在时间上出现重叠，即被识别为 Multi-clauding，代表你正在并行处理多项任务。
+        </p>
+
+    </div>
+
+    <!-- Time of Day & Tool Errors -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title" style="display: flex; align-items: center; gap: 12px;">
+          按时段分布的用户消息
+          <select id="timezone-select" style="font-size: 12px; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0;">
+            <option value="8">中国时间 (UTC+8)</option>
+            <option value="0">伦敦 (UTC+0)</option>
+            <option value="9">东京 (UTC+9)</option>
+            <option value="-8">太平洋时间 (UTC-8)</option>
+            <option value="-5">东部时间 (UTC-5)</option>
+            <option value="1">中欧时间 (UTC+1)</option>
+            <option value="custom">自定义偏移...</option>
+          </select>
+          <input type="number" id="custom-offset" placeholder="UTC 偏移" style="display: none; width: 80px; font-size: 12px; padding: 4px; border-radius: 4px; border: 1px solid #e2e8f0;">
+        </div>
+        <div id="hour-histogram">
+      <div class="bar-row">
+        <div class="bar-label">上午 (6-12)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:86.29550321199143%;background:#8b5cf6"></div></div>
+        <div class="bar-value">403</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">下午 (12-18)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">467</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">傍晚 (18-24)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:17.77301927194861%;background:#8b5cf6"></div></div>
+        <div class="bar-value">83</div>
+      </div>
+
+      <div class="bar-row">
+        <div class="bar-label">深夜 (0-6)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:0%;background:#8b5cf6"></div></div>
+        <div class="bar-value">0</div>
+      </div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title"> encountered 的工具错误</div>
+        <div class="bar-row">
+        <div class="bar-label">其他</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
+        <div class="bar-value">110</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">命令失败</div>
+        <div class="bar-track"><div class="bar-fill" style="width:59.09090909090909%;background:#dc2626"></div></div>
+        <div class="bar-value">65</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">编辑失败</div>
+        <div class="bar-track"><div class="bar-fill" style="width:42.72727272727273%;background:#dc2626"></div></div>
+        <div class="bar-value">47</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">文件未找到</div>
+        <div class="bar-track"><div class="bar-fill" style="width:21.818181818181817%;background:#dc2626"></div></div>
+        <div class="bar-value">24</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">用户拒绝</div>
+        <div class="bar-track"><div class="bar-fill" style="width:13.636363636363635%;background:#dc2626"></div></div>
+        <div class="bar-value">15</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">文件已变更</div>
+        <div class="bar-track"><div class="bar-fill" style="width:10%;background:#dc2626"></div></div>
+        <div class="bar-value">11</div>
+      </div>
+      </div>
+    </div>
+
+
+    <h2 id="section-wins">亮眼表现</h2>
+    <p class="section-intro">数据显示，你是一位高产且高效的开发者，擅长处理复杂、多层次的工程任务，并取得了令人瞩目的成果。</p>
+    <div class="big-wins">
+
+        <div class="big-win">
+          <div class="big-win-title">全栈功能集成</div>
+          <div class="big-win-desc">你持续推动跨越后端逻辑、API 集成与前端 UI 打磨的端到端实现。在后台管理、小程序与外部服务之间协调变更的能力，展现了扎实的架构意识。</div>
+        </div>
+
+        <div class="big-win">
+          <div class="big-win-title">迭代式调试与问题攻克</div>
+          <div class="big-win-desc">当初始方案偏离方向时，你能通过精准的反馈及时纠偏——例如修正时段逻辑或字段映射。这种协作式的精修，让时区处理、唯一键约束等复杂问题得到了稳健的解决。</div>
+        </div>
+
+        <div class="big-win">
+          <div class="big-win-title">工具链与环境优化</div>
+          <div class="big-win-desc">你主动通过配置插件、MCP Server 与 IDE 设置来优化自己的开发流程。成功安装并调试 Claude HUD、Token Optimizer 等工具，体现了一份对高效开发环境的执着追求。</div>
+        </div>
+
+    </div>
+
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">最有用的能力（Claude 视角）</div>
+        <div class="bar-row">
+        <div class="bar-label">准确的代码编辑</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#16a34a"></div></div>
+        <div class="bar-value">30</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">出色的调试</div>
+        <div class="bar-track"><div class="bar-fill" style="width:33.33333333333333%;background:#16a34a"></div></div>
+        <div class="bar-value">10</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">快速精准的搜索</div>
+        <div class="bar-track"><div class="bar-fill" style="width:10%;background:#16a34a"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">清晰的解释</div>
+        <div class="bar-track"><div class="bar-fill" style="width:6.666666666666667%;background:#16a34a"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">主动提供帮助</div>
+        <div class="bar-track"><div class="bar-fill" style="width:6.666666666666667%;background:#16a34a"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">跨文件批量修改</div>
+        <div class="bar-track"><div class="bar-fill" style="width:6.666666666666667%;background:#16a34a"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">任务达成情况</div>
+        <div class="bar-row">
+        <div class="bar-label">未达成</div>
+        <div class="bar-track"><div class="bar-fill" style="width:8.695652173913043%;background:#8b5cf6"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">部分达成</div>
+        <div class="bar-track"><div class="bar-fill" style="width:13.043478260869565%;background:#8b5cf6"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">基本达成</div>
+        <div class="bar-track"><div class="bar-fill" style="width:86.95652173913044%;background:#8b5cf6"></div></div>
+        <div class="bar-value">20</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">完全达成</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#8b5cf6"></div></div>
+        <div class="bar-value">23</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">难以判断</div>
+        <div class="bar-track"><div class="bar-fill" style="width:8.695652173913043%;background:#8b5cf6"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+      </div>
+    </div>
+
+
+    <h2 id="section-friction">问题所在</h2>
+    <p class="section-intro">主要的摩擦来自 Claude 在上下文尚未充分收集的情况下就急于生成代码，导致大量有 Bug 的迭代和在错误方向上的返工。</p>
+    <div class="friction-categories">
+
+        <div class="friction-category">
+          <div class="friction-title">仓促实现</div>
+          <div class="friction-desc">你多次允许 Claude 在未充分核实需求或现有架构的情况下，就一头扎进代码或复杂改动。一旦初始方案有误，便不得不大面积返工。若能在任何编辑开始前，先要求一份简要分析或方案概述，这类问题便可大幅减少。</div>
+          <ul class="friction-examples"><li>Claude 在你明确只需设计文档之前，就已经为退款功能编写了代码并引入了各种 import，白白浪费时间在无谓的构建错误上。</li><li>Claude 为服务类型新建了数据库字段，而非复用已有字段，迫使你中途纠正这一过度设计。</li></ul>
+        </div>
+
+        <div class="friction-category">
+          <div class="friction-title">上下文核实不足</div>
+          <div class="friction-desc">许多错误源于 Claude 在未阅读相关文档或配置文件之前，就对 API 结构、文件路径或框架行为做出了想当然的假设。明确请求 Claude 在提出修复方案前先读一读关键配置或 Schema 文件，可以有效缓解这一问题。</div>
+          <ul class="friction-examples"><li>Claude 多次误判 Pinduoduo 和 JD API 的参数与响应结构，不得不参照官方文档与错误日志反复调试。</li><li>Claude 在 Hexo 路由与主题覆盖上频频受挫，尝试了多种错误的文件结构改动，最终才定位到根因——缺失一个重定向脚本。</li></ul>
+        </div>
+
+        <div class="friction-category">
+          <div class="friction-title">调试循环</div>
+          <div class="friction-desc">你常遇到这样的情况：Claude 的第一版修复要么不对，要么不完整，导致你陷入多轮调试，而若初始诊断能更彻底，这些问题本可一次性解决。鼓励 Claude 在给出修复方案前，先考虑边界情况与潜在副作用，有助于打破这类循环。</div>
+          <ul class="friction-examples"><li>时区修复首次失败，原因是 Claude 忽略了一个自定义的 LocalDateTimeTypeHandler 覆盖了 SQL 转换逻辑，不得不在第二轮迭代中将其移除。</li><li>禁用过去时间段的逻辑，在你的反馈之后才从结束时间比较修正为开始时间比较，可见初始逻辑并未深思熟虑。</li></ul>
+        </div>
+
+    </div>
+
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">主要摩擦类型</div>
+        <div class="bar-row">
+        <div class="bar-label">有 Bug 的代码</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#dc2626"></div></div>
+        <div class="bar-value">41</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">错误的方法</div>
+        <div class="bar-track"><div class="bar-fill" style="width:63.41463414634146%;background:#dc2626"></div></div>
+        <div class="bar-value">26</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">误解需求</div>
+        <div class="bar-track"><div class="bar-fill" style="width:12.195121951219512%;background:#dc2626"></div></div>
+        <div class="bar-value">5</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">用户拒绝的操作</div>
+        <div class="bar-track"><div class="bar-fill" style="width:7.317073170731707%;background:#dc2626"></div></div>
+        <div class="bar-value">3</div>
+      </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">推断满意度（模型估算）</div>
+        <div class="bar-row">
+        <div class="bar-label">不满意</div>
+        <div class="bar-track"><div class="bar-fill" style="width:14.285714285714285%;background:#eab308"></div></div>
+        <div class="bar-value">14</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">较满意</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#eab308"></div></div>
+        <div class="bar-value">98</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">满意</div>
+        <div class="bar-track"><div class="bar-fill" style="width:45.91836734693878%;background:#eab308"></div></div>
+        <div class="bar-value">45</div>
+      </div>
+<div class="bar-row">
+        <div class="bar-label">非常满意</div>
+        <div class="bar-track"><div class="bar-fill" style="width:2.0408163265306123%;background:#eab308"></div></div>
+        <div class="bar-value">2</div>
+      </div>
+      </div>
+    </div>
+
+
+
+    <h2 id="section-features">值得尝试的 CC 功能</h2>
+    <div class="claude-md-section">
+      <h3>建议加入 CLAUDE.md 的规则</h3>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">直接将以下内容粘贴到 Claude Code，即可加入你的 CLAUDE.md。</p>
+      <div class="claude-md-actions">
+        <button class="copy-all-btn" onclick="copyAllCheckedClaudeMd()">复制所有已勾选项</button>
+      </div>
+
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-0" class="cmd-checkbox" checked data-text="Add under a new ## CSS &amp; Styling section, or append to existing Frontend guidelines.\n\nWhen modifying CSS or UI styles, always check for separate production/dist CSS files that may override development changes. Verify changes are reflected in the correct build output.">
+          <label for="cmd-0">
+            <code class="cmd-code">修改 CSS 或 UI 样式时，务必检查是否存在单独的 production/dist CSS 文件，它们可能会覆盖开发阶段的改动。请确认改动体现在正确的构建产物中。</code>
+            <button class="copy-btn" onclick="copyCmdItem(0)">复制</button>
+          </label>
+          <div class="cmd-why">多个会话出现 CSS 改动不生效的情况，原因是独立的 production CSS 文件或缓存问题，导致额外的调试轮次。</div>
+        </div>
+
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-1" class="cmd-checkbox" checked data-text="Add under ## Backend Development or ## API Integration section.\n\nBefore implementing new database fields or API parameters, verify the existing schema and official API documentation first. Prefer reusing existing fields over creating new ones unless explicitly required.">
+          <label for="cmd-1">
+            <code class="cmd-code">在新增数据库字段或 API 参数之前，务必先核对现有 schema 与官方 API 文档。除非明确要求，否则应优先复用已有字段，而非新建。</code>
+            <button class="copy-btn" onclick="copyCmdItem(1)">复制</button>
+          </label>
+          <div class="cmd-why">多个摩擦点源于 Claude 新建了本可复用的 DB 字段，或在未查阅文档的情况下就误判了 API 参数。</div>
+        </div>
+
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-2" class="cmd-checkbox" checked data-text="Add under a new ## Hexo / Blog Platform section.\n\nFor Hexo/blog projects, be aware of routing conflicts with SPA themes. Do not inject raw scripts into markdown content as Hexo will render them as code blocks. Use proper theme override mechanisms or redirect scripts.">
+          <label for="cmd-2">
+            <code class="cmd-code">对于 Hexo/博客项目，请注意与 SPA 主题之间的路由冲突。切勿在 Markdown 内容中直接注入原始脚本，否则 Hexo 会将其渲染为代码块显示。请使用正确的主题覆盖机制或重定向脚本。</code>
+            <button class="copy-btn" onclick="copyCmdItem(2)">复制</button>
+          </label>
+          <div class="cmd-why">多个会话涉及 Hexo 路由问题，脚本注入导致代码直接显示在首页而非被执行。</div>
+        </div>
+
+        <div class="claude-md-item">
+          <input type="checkbox" id="cmd-3" class="cmd-checkbox" checked data-text="Add under ## Java / Backend Debugging section.\n\nWhen fixing timezone-related bugs, check for custom TypeHandlers (e.g., LocalDateTimeTypeHandler) that may override standard SQL timezone conversions before applying AT TIME ZONE fixes.">
+          <label for="cmd-3">
+            <code class="cmd-code">修复时区相关 Bug 时，在应用 AT TIME ZONE 方案前，请先检查是否存在自定义 TypeHandler（例如 LocalDateTimeTypeHandler），它们可能会覆盖标准的 SQL 时区转换。</code>
+            <button class="copy-btn" onclick="copyCmdItem(3)">复制</button>
+          </label>
+          <div class="cmd-why">某个会话中，初次时区修复失败，正是因为自定义 TypeHandler 覆盖了转换逻辑，直到第二轮迭代才被发现。</div>
+        </div>
+
+    </div>
+
+
+    <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">直接将以下内容粘贴到 Claude Code，它将自动为你完成配置。</p>
+    <div class="features-section">
+
+        <div class="feature-card">
+          <div class="feature-title">Custom Skills（自定义技能）</div>
+          <div class="feature-oneliner">为 commit message、PR 评审、Bug 修复模板等重复性工作流，打造可复用的提示词。</div>
+          <div class="feature-why"><strong>对你的价值：</strong>你在 69 个会话中密集地进行调试与功能实现；像 <code>/debug-backend</code> 或 <code>/fix-css</code> 这样的 Skill，能让你的方法更规范，减少重复指令的输入。</div>
+
+          <div class="feature-examples">
+            <div class="feature-example">
+              <div class="example-code-row">
+                <code class="example-code">Create .claude/skills/debug-backend/SKILL.md with steps: 1) Check logs, 2) Identify error type, 3) Propose fix, 4) Verify. Then run /debug-backend when hitting backend bugs.</code>
+                <button class="copy-btn" onclick="copyText(this)">复制</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-title">MCP Servers</div>
+          <div class="feature-oneliner">通过 Model Context Protocol 将 Claude 与外部工具、数据库、API 连接起来。</div>
+          <div class="feature-why"><strong>对你的价值：</strong>你经常调试 PDD/JD、DashScope、微信支付等 API 集成，并自行安装过 MCP Server；为常用 API 预先配置好 MCP 连接，可以大幅提升集成调试效率。</div>
+
+          <div class="feature-examples">
+            <div class="feature-example">
+              <div class="example-code-row">
+                <code class="example-code">claude mcp add my-api-debug -- npx -y @modelcontextprotocol/server-fetch</code>
+                <button class="copy-btn" onclick="copyText(this)">复制</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-title">Hooks（钩子）</div>
+          <div class="feature-oneliner">在 post-edit、pre-commit 等特定生命周期节点，自动运行 Shell 命令。</div>
+          <div class="feature-why"><strong>对你的价值：</strong>你只有 3 次 commit，却有大量代码编辑；通过 Hook 在每次编辑后自动运行 TypeScript 检查或 lint，可以把编译错误（比如那个变量初始化的 Bug）提前拦截，而不必等到运行才发现问题。</div>
+
+          <div class="feature-examples">
+            <div class="feature-example">
+              <div class="example-code-row">
+                <code class="example-code">Add to .claude/settings.json: {&quot;hooks&quot;: {&quot;post_edit&quot;: &quot;npx tsc --noEmit&quot;}}</code>
+                <button class="copy-btn" onclick="copyText(this)">复制</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+    </div>
+
+
+    <h2 id="section-patterns">使用 Claude Code 的新模式</h2>
+    <p style="font-size: 13px; color: #64748b; margin-bottom: 12px;">直接将以下内容粘贴到 Claude Code，它会一步步引导你完成。</p>
+    <div class="patterns-section">
+
+        <div class="pattern-card">
+          <div class="pattern-title">高 Edit/Read 比率：深度代码库作业</div>
+          <div class="pattern-summary">用 Task Agent 代替手动的 Read/Grep 循环，处理复杂的多文件探索任务。</div>
+          <div class="pattern-detail">你最常用的工具是 Edit（1773 次）、Read（1745 次）、Bash（1621 次），体现出对代码库的深度交互。对于诸如"理解这个遗留模块"或"找出 X 的所有使用处"之类的任务，Task Agent 能并行跨文件探索，省去你目前手动的 Read/Grep 往返。</div>
+
+          <div class="copyable-prompt-section">
+            <div class="prompt-label">粘贴到 Claude Code：</div>
+            <div class="copyable-prompt-row">
+              <code class="copyable-prompt">Use an agent to explore how the order refund flow works across backend, admin frontend, and mini-program. Map out all related files and data flows.</code>
+              <button class="copy-btn" onclick="copyText(this)">复制</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="pattern-card">
+          <div class="pattern-title">调试是你工作流的核心</div>
+          <div class="pattern-summary">创建一个标准化调试清单 Skill，减少走错方向的摩擦。</div>
+          <div class="pattern-detail">调试是你排名第一的目标（15 个会话），而"方法错误"也是主要摩擦点之一（26 次）。一个强制推行调试规范的 Custom Skill——先查日志、再验证 schema/文档、再本地复现——能帮你避免类似时区 TypeHandler 或 API 参数错位那样的开局失误。</div>
+
+          <div class="copyable-prompt-section">
+            <div class="prompt-label">粘贴到 Claude Code：</div>
+            <div class="copyable-prompt-row">
+              <code class="copyable-prompt">/debug-backend: I&apos;m seeing [error message]. Follow the debugging protocol: 1) Check relevant logs, 2) Verify DB schema/API docs, 3) Reproduce locally, 4) Propose targeted fix.</code>
+              <button class="copy-btn" onclick="copyText(this)">复制</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="pattern-card">
+          <div class="pattern-title">重度 Java + TypeScript 技术栈，伴随大量 API 集成</div>
+          <div class="pattern-summary">为最常用的外部 API 配置 MCP Server，让集成调试更顺畅。</div>
+          <div class="pattern-detail">Java 是你使用最多的语言（972 次），其次是 TypeScript（170 次），你还频繁调试 API 集成（12 个会话用于 api_integration_debugging）。为拼多多、京东、DashScope、微信支付等 API 预先配置 MCP Server，可以让 Claude 直接查询线上 API 规范并测试响应，减少参数错配错误。</div>
+
+          <div class="copyable-prompt-section">
+            <div class="prompt-label">粘贴到 Claude Code：</div>
+            <div class="copyable-prompt-row">
+              <code class="copyable-prompt">Set up an MCP server for the Pinduoduo affiliate API so I can query endpoint specs and test responses directly from Claude.</code>
+              <button class="copy-btn" onclick="copyText(this)">复制</button>
+            </div>
+          </div>
+
+        </div>
+
+    </div>
+
+
+
+    <h2 id="section-horizon">前沿展望</h2>
+    <p class="section-intro">AI 辅助开发正在从被动的代码生成，迈向能够端到端处理复杂工程任务的自主式多步工作流。</p>
+    <div class="horizon-section">
+
+        <div class="horizon-card">
+          <div class="horizon-title">自主式测试驱动调试循环</div>
+          <div class="horizon-possible">Agent 可以自主为报告中的 Bug 编写失败测试，迭代修复直至所有测试通过，并验证无回归风险，全程无需人工介入。这将把调试从一项手动诊断工作，转变为一个自我修正的流水线，在代码进入评审之前即保证正确性。</div>
+          <div class="horizon-tip"><strong>入手建议：</strong>结合 Claude Code 与 Jest 或 JUnit 等测试框架，指示 Agent 先写测试，再修复代码直至全部通过。</div>
+          <div class="pattern-prompt"><div class="prompt-label">粘贴到 Claude Code：</div><code>Analyze the bug report for [feature]. First, write a comprehensive test case that reproduces the issue and fails. Then, iteratively modify the source code until the test passes. Run the full test suite to ensure no regressions. Report the final diff and test results.</code><button class="copy-btn" onclick="copyText(this)">复制</button></div>
+        </div>
+
+        <div class="horizon-card">
+          <div class="horizon-title">并行多服务集成 Agent</div>
+          <div class="horizon-possible">部署并行的 Sub-Agent，同时集成多个外部 API、协调数据 Schema、实时解决文档冲突。这将消除 API 集成的串行瓶颈，让复杂的多供应商功能在原先几分之一的时间内完成构建。</div>
+          <div class="horizon-tip"><strong>入手建议：</strong>借助 Claude Code 的 TaskCreate 工具为每个 API 端点生成并行任务，然后统一编排它们的输出。</div>
+          <div class="pattern-prompt"><div class="prompt-label">粘贴到 Claude Code：</div><code>Split the integration of [API_A], [API_B], and [API_C] into three parallel tasks. Each task should: 1) Read official docs, 2) Implement the client wrapper, 3) Write unit tests against mocked responses. Once all three complete, merge them into a unified service layer with consistent error handling and data models.</code><button class="copy-btn" onclick="copyText(this)">复制</button></div>
+        </div>
+
+        <div class="horizon-card">
+          <div class="horizon-title">自愈合 CI/CD 流水线助手</div>
+          <div class="horizon-possible">Agent 可以监控 CI 失败，通过分析日志与最近的提交定位根因，并针对依赖冲突、配置错误等常见问题自动提出或直接应用修复方案。这将打造一个韧性十足的开发循环，让基础设施层面的摩擦被自主化解。</div>
+          <div class="horizon-tip"><strong>入手建议：</strong>通过 Bash/Grep 工具将 Claude Code 接入你的 CI 日志，提示它分析失败原因并给出修复建议。</div>
+          <div class="pattern-prompt"><div class="prompt-label">粘贴到 Claude Code：</div><code>Review the latest CI failure log at [path]. Identify the root cause by cross-referencing the error with recent git commits and dependency changes. If it&apos;s a known pattern (e.g., version mismatch, missing env var), generate the fix directly. If complex, provide a step-by-step remediation plan with exact commands.</code><button class="copy-btn" onclick="copyText(this)">复制</button></div>
+        </div>
+
+    </div>
+
+
+
+    <div class="fun-ending">
+      <div class="fun-headline">「Claude 为服务类型新增了数据库字段，结果被你温柔地提醒：其实已有字段直接复用即可。」</div>
+      <div class="fun-detail">在一次允许回访时修改服务类型的会话中，Claude 最初选择了新建字段，直到你出面以更简洁的方案接手。</div>
+    </div>
+
+
+
+  </div>
+  <script>
+    function toggleCollapsible(header) {
+      header.classList.toggle('open');
+      const content = header.nextElementSibling;
+      content.classList.toggle('open');
+    }
+    function copyText(btn) {
+      const code = btn.previousElementSibling;
+      navigator.clipboard.writeText(code.textContent).then(() => {
+        btn.textContent = '已复制！';
+        setTimeout(() => { btn.textContent = '复制'; }, 2000);
+      });
+    }
+    function copyCmdItem(idx) {
+      const checkbox = document.getElementById('cmd-' + idx);
+      if (checkbox) {
+        const text = checkbox.dataset.text;
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = checkbox.nextElementSibling.querySelector('.copy-btn');
+          if (btn) { btn.textContent = '已复制！'; setTimeout(() => { btn.textContent = '复制'; }, 2000); }
+        });
+      }
+    }
+    function copyAllCheckedClaudeMd() {
+      const checkboxes = document.querySelectorAll('.cmd-checkbox:checked');
+      const texts = [];
+      checkboxes.forEach(cb => {
+        if (cb.dataset.text) { texts.push(cb.dataset.text); }
+      });
+      const combined = texts.join('\n');
+      const btn = document.querySelector('.copy-all-btn');
+      if (btn) {
+        navigator.clipboard.writeText(combined).then(() => {
+          btn.textContent = '已复制 ' + texts.length + ' 项！';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = '复制所有已勾选项'; btn.classList.remove('copied'); }, 2000);
+        });
+      }
+    }
+    // 原始数据为太平洋时间（PT）下的小时分布，此处改为以 UTC 偏移为参数进行换算
+    const rawHourCountsByHour = {8:14, 9:82, 10:150, 11:157, 12:5, 14:125, 15:105, 16:119, 17:113, 18:12, 19:36, 20:35};
+    function updateHourHistogram(utcOffset) {
+      // 将原始 PT（UTC-8）的小时数转换到目标时区
+      const adjustedCounts = {};
+      for (const [hourStr, count] of Object.entries(rawHourCountsByHour)) {
+        const ptHour = parseInt(hourStr, 10);
+        const utcHour = (ptHour + 8 + 24) % 24;
+        const localHour = (utcHour + utcOffset + 24) % 24;
+        adjustedCounts[localHour] = (adjustedCounts[localHour] || 0) + count;
+      }
+      const periods = [
+        { label: "上午 (6-12)", range: [6,7,8,9,10,11] },
+        { label: "下午 (12-18)", range: [12,13,14,15,16,17] },
+        { label: "傍晚 (18-24)", range: [18,19,20,21,22,23] },
+        { label: "深夜 (0-6)", range: [0,1,2,3,4,5] }
+      ];
+      const periodCounts = periods.map(p => ({
+        label: p.label,
+        count: p.range.reduce((sum, h) => sum + (adjustedCounts[h] || 0), 0)
+      }));
+      const maxCount = Math.max(...periodCounts.map(p => p.count)) || 1;
+      const container = document.getElementById('hour-histogram');
+      container.textContent = '';
+      periodCounts.forEach(p => {
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        const label = document.createElement('div');
+        label.className = 'bar-label';
+        label.textContent = p.label;
+        const track = document.createElement('div');
+        track.className = 'bar-track';
+        const fill = document.createElement('div');
+        fill.className = 'bar-fill';
+        fill.style.width = (p.count / maxCount) * 100 + '%';
+        fill.style.background = '#8b5cf6';
+        track.appendChild(fill);
+        const value = document.createElement('div');
+        value.className = 'bar-value';
+        value.textContent = p.count;
+        row.appendChild(label);
+        row.appendChild(track);
+        row.appendChild(value);
+        container.appendChild(row);
+      });
+    }
+    // 默认以中国时间（UTC+8）显示
+    updateHourHistogram(8);
+    document.getElementById('timezone-select').addEventListener('change', function() {
+      const customInput = document.getElementById('custom-offset');
+      if (this.value === 'custom') {
+        customInput.style.display = 'inline-block';
+        customInput.focus();
+      } else {
+        customInput.style.display = 'none';
+        updateHourHistogram(parseInt(this.value, 10));
+      }
+    });
+    document.getElementById('custom-offset').addEventListener('change', function() {
+      const parsed = parseInt(this.value, 10);
+      if (isNaN(parsed)) return;
+      updateHourHistogram(parsed);
+    });
+
+    // 隐藏 loading
+    (function() {
+      const loadingOverlay = document.getElementById('loading-overlay');
+      function hideLoading() {
+        setTimeout(function() {
+          if (loadingOverlay) {
+            loadingOverlay.classList.add('hidden');
+          }
+        }, 500);
+      }
+      if (document.readyState === 'complete') {
+        hideLoading();
+      } else {
+        window.addEventListener('load', hideLoading);
+      }
+    })();
+  </script>
+</body>
+</html>

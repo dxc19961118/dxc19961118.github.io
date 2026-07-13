@@ -1,0 +1,310 @@
+:root {
+    --ccpw-accent: #6366f1;
+    --ccpw-accent-2: #8b5cf6;
+    --ccpw-accent-bg: rgba(99, 102, 241, .08);
+    --ccpw-bg: #f8f7f4;
+    --ccpw-surface: #ffffff;
+    --ccpw-border: #e8e6e1;
+    --ccpw-border-subtle: rgba(0, 0, 0, .06);
+    --ccpw-text: #1a1a1a;
+    --ccpw-text-2: #4a4a4a;
+    --ccpw-text-3: #737373;
+    --ccpw-text-4: #999999;
+    --ccpw-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --ccpw-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    --ccpw-transition: color .4s ease, background-color .4s ease, border-color .4s ease, box-shadow .4s ease
+}
+
+:root[data-theme=dark] {
+    --ccpw-bg: #0f0f11;
+    --ccpw-surface: #1a1a1d;
+    --ccpw-border: #2a2a2e;
+    --ccpw-border-subtle: rgba(255, 255, 255, .08);
+    --ccpw-text: #f0f0f0;
+    --ccpw-text-2: #b8b8b8;
+    --ccpw-text-3: #888888;
+    --ccpw-text-4: #666666;
+    --ccpw-accent: #818cf8;
+    --ccpw-accent-2: #a78bfa;
+    --ccpw-accent-bg: rgba(129, 140, 248, .12)
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --ccpw-transition: none
+    }
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box
+}
+
+* {
+    margin: 0;
+    padding: 0
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    font-family: var(--ccpw-font-sans);
+    background: var(--ccpw-bg);
+    color: var(--ccpw-text);
+    -webkit-font-smoothing: antialiased;
+    transition: var(--ccpw-transition)
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: inherit
+}
+
+input,
+textarea {
+    font: inherit
+}
+
+.ccpw-shell {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 56px 32px 96px
+}
+
+.ccpw-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--ccpw-border)
+}
+
+.ccpw-title-group {
+    flex: 1
+}
+
+.ccpw-header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -.01em
+}
+
+.ccpw-subtitle {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--ccpw-text-4)
+}
+
+.ccpw-sidebar-toggle {
+    display: none;
+    padding: 6px 10px;
+    border: 1px solid var(--ccpw-border);
+    border-radius: 6px;
+    font-size: 16px;
+    color: var(--ccpw-text-2);
+    transition: background-color .15s, border-color .15s
+}
+
+.ccpw-sidebar-toggle:hover {
+    background: var(--ccpw-accent-bg);
+    border-color: var(--ccpw-accent)
+}
+
+.ccpw-body {
+    display: grid;
+    grid-template-columns: 224px 1fr;
+    gap: 40px;
+    align-items: start
+}
+
+.ccpw-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px
+}
+
+.ccpw-source-note {
+    font-size: 13px;
+    color: var(--ccpw-text-4);
+    margin-bottom: -8px
+}
+
+.ccpw-source-note a {
+    color: var(--ccpw-accent)
+}
+
+.ccpw-source-note a:hover {
+    text-decoration: underline
+}
+
+.ccpw-content[hidden] {
+    display: none
+}
+
+.ccpw-placeholder {
+    grid-column: 2;
+    padding: 64px 32px;
+    text-align: center;
+    color: var(--ccpw-text-4);
+    border: 1px dashed var(--ccpw-border);
+    border-radius: 10px;
+    font-family: var(--ccpw-mono)
+}
+
+.ccpw-card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease
+}
+
+.ccpw-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.06)
+}
+
+.ccpw-section-content {
+    grid-column: 2
+}
+
+.ccpw-backdrop {
+    display: none
+}
+
+.ccpw-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid var(--ccpw-border-subtle)
+}
+
+.ccpw-footer button {
+    padding: 8px 16px;
+    border: 1px solid var(--ccpw-border);
+    border-radius: 8px;
+    color: var(--ccpw-text-3);
+    font-size: 13px;
+    transition: background-color .2s, border-color .2s
+}
+
+.ccpw-footer button:hover {
+    background: var(--ccpw-accent-bg);
+    border-color: var(--ccpw-accent)
+}
+
+.ccpw-global-footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 13px
+}
+
+.ccpw-global-footer a {
+    color: var(--ccpw-text-4);
+    transition: color .15s
+}
+
+.ccpw-global-footer a:hover {
+    color: var(--ccpw-accent)
+}
+
+@media (max-width: 640px) {
+    .ccpw-shell {
+        padding: 32px 20px 64px
+    }
+
+    .ccpw-header h1 {
+        font-size: 22px
+    }
+
+    .ccpw-subtitle {
+        font-size: 12px
+    }
+
+    .ccpw-sidebar-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center
+    }
+
+    .ccpw-body {
+        grid-template-columns: 1fr
+    }
+
+    .ccpw-placeholder,
+    .ccpw-section-content {
+        grid-column: 1
+    }
+
+    .ccpw-backdrop.open {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: #0006;
+        z-index: 40
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    @keyframes ccpw-glow-pulse {
+
+        0%,
+        to {
+            box-shadow: 0 0 0 0 var(--ccpw-accent-bg)
+        }
+
+        50% {
+            box-shadow: 0 0 16px 2px var(--ccpw-accent-bg)
+        }
+    }
+
+    @keyframes ccpw-stagger-in {
+        0% {
+            opacity: 0;
+            transform: translateY(8px)
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    }
+
+    @keyframes ccpw-chromatic-shift {
+
+        0%,
+        to {
+            text-shadow: none
+        }
+
+        50% {
+            text-shadow: -1px 0 var(--ccpw-accent), 1px 0 var(--ccpw-accent-2)
+        }
+    }
+
+    @keyframes ccpw-scanline {
+        0% {
+            transform: translateY(-100%)
+        }
+
+        to {
+            transform: translateY(100vh)
+        }
+    }
+
+    .ccpw-card {
+        animation: ccpw-stagger-in .32s ease both
+    }
+
+    .ccpw-card:hover {
+        animation: ccpw-glow-pulse 1.6s ease infinite
+    }
+}
