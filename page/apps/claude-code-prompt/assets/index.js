@@ -1,11 +1,19 @@
 <!doctype html><html lang="en"><head><!-- hexo injector head_begin start --><meta name="description" content="site_meta"></meta><!-- hexo injector head_begin end --><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="/favicon.ico">
 <script>
-// 自动跳转到 Claude Code 提示台独立页面
+// 自动跳转到独立应用页面
 (function() {
+  var redirectMap = {
+    '/page/claude-code-prompt': '/apps/claude-code-prompt/index.html',
+    '/page/lithos-hero': '/apps/lithos-hero/index.html',
+    '/page/vanguard': '/apps/vanguard/index.html'
+  };
+
   function checkAndRedirect() {
-    if (window.location.pathname === '/page/claude-code-prompt' ||
-        window.location.pathname === '/page/claude-code-prompt/') {
-      window.location.href = '/apps/claude-code-prompt/index.html';
+    var path = window.location.pathname;
+    // 去掉尾部斜杠后再匹配
+    var normalizedPath = path.replace(/\/$/, '');
+    if (redirectMap[normalizedPath]) {
+      window.location.href = redirectMap[normalizedPath];
     }
   }
 
@@ -16,7 +24,7 @@
   window.addEventListener('popstate', checkAndRedirect);
 
   // 定期检查 URL 变化（防止 Vue Router 不使用 popstate）
-  let lastPath = window.location.pathname;
+  var lastPath = window.location.pathname;
   setInterval(function() {
     if (window.location.pathname !== lastPath) {
       lastPath = window.location.pathname;
@@ -26,26 +34,7 @@
 })();
 </script>
 <script type="module" crossorigin src="/static/js/index_prod-7a7a95b2.js"></script><link rel="stylesheet" href="/static/css/index_prod-477843f6.css"><!-- hexo injector head_end start --><script rel="prefetch" async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/components/prism-core.js" data-manual></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script><link rel="stylesheet" href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/themes/prism.min.css"/><link rel="stylesheet" href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"/><link rel="stylesheet" href="https://fonts.loli.net/css?family=Rubik" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo For Dxc" type="application/atom+xml">
-</head><body id="body-container"><noscript><strong>We're sorry but this app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><!-- hexo injector body_end start --><script>
-(function() {
-  function hideRandomBtn() {
-    var links = document.querySelectorAll(".link-box-btn-group a");
-    for (var i = 0; i < links.length; i++) {
-      if (links[i].textContent.trim() === "\u968f\u673a\u8bbf\u95ee") {
-        links[i].style.display = "none";
-      }
-    }
-  }
-  if (document.readyState === "complete") {
-    setTimeout(hideRandomBtn, 800);
-  } else {
-    window.addEventListener("load", function() { setTimeout(hideRandomBtn, 800); });
-  }
-  var observer = new MutationObserver(function() { hideRandomBtn(); });
-  observer.observe(document.body, { childList: true, subtree: true });
-  setTimeout(function() { observer.disconnect(); }, 6000);
-})();
-</script>
+</head><body id="body-container"><noscript><strong>We're sorry but this app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><!-- hexo injector body_end start -->
 <style>
 .click-effect {
   position: fixed;
@@ -187,7 +176,26 @@
   setTimeout(function() { observer.disconnect(); }, 6000);
 })();
 </script>
-
+<script>
+(function() {
+  function hideRandomBtn() {
+    var links = document.querySelectorAll(".link-box-btn-group a");
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].textContent.trim() === "\u968f\u673a\u8bbf\u95ee") {
+        links[i].style.display = "none";
+      }
+    }
+  }
+  if (document.readyState === "complete") {
+    setTimeout(hideRandomBtn, 800);
+  } else {
+    window.addEventListener("load", function() { setTimeout(hideRandomBtn, 800); });
+  }
+  var observer = new MutationObserver(function() { hideRandomBtn(); });
+  observer.observe(document.body, { childList: true, subtree: true });
+  setTimeout(function() { observer.disconnect(); }, 6000);
+})();
+</script>
 <style>
 #particleCanvas {
   position: fixed;
