@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D 地球 | Dxc's Blog</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-4px);
+    }
+
+    .back-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .info-panel {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      z-index: 10;
+      max-width: 320px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
+
+    .info-panel h1 {
+      font-size: 20px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .info-panel p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .info-panel .tech {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .info-panel .tech a {
+      color: #4ea1ff;
+      text-decoration: none;
+    }
+
+    .info-panel .tech a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .info-panel {
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        max-width: none;
+      }
+
+      .back-button {
+        top: 15px;
+        left: 15px;
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="/" class="back-button" title="返回博客首页">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+    返回首页
+  </a>
+
+  <div id="canvas-container">
+    <canvas id="globe"></canvas>
+  </div>
+
+  <div class="info-panel">
+    <h1>3D 互动地球</h1>
+    <p>基于 WebGL 的实时渲染地球，使用 COBE 库实现。拖动鼠标可旋转视角，滚轮可缩放。</p>
+    <div class="tech">
+      Powered by <a href="https://github.com/shuding/cobe" target="_blank" rel="noopener">COBE</a> · 仅 ~5KB 的 WebGL 地球库
+    </div>
+  </div>
+
+  <script type="module">
+    import createGlobe from 'https://esm.sh/cobe@0.6.3';
+
+    const canvas = document.getElementById('globe');
+    const container = document.getElementById('canvas-container');
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = container.offsetWidth * dpr;
+      canvas.height = container.offsetHeight * dpr;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const markers = [
+      { location: [39.9042, 116.4074], size: 0.05 },
+      { location: [31.2304, 121.4737], size: 0.05 },
+      { location: [26.0745, 119.2965], size: 0.06 },
+      { location: [30.5728, 104.0668], size: 0.04 },
+      { location: [23.1291, 113.2644], size: 0.04 },
+      { location: [22.5431, 114.0579], size: 0.04 },
+      { location: [40.7128, -74.0060], size: 0.04 },
+      { location: [51.5074, -0.1278], size: 0.04 },
+      { location: [35.6762, 139.6503], size: 0.04 },
+      { location: [48.8566, 2.3522], size: 0.04 },
+      { location: [-33.8688, 151.2093], size: 0.04 },
+    ];
+
+    let phi = 0;
+
+    const globe = createGlobe(canvas, {
+      devicePixelRatio: window.devicePixelRatio || 1,
+      width: canvas.width,
+      height: canvas.height,
+      phi: 0,
+      theta: 0.25,
+      dark: true,
+      diffuse: 0.8,
+      mapSamples: 16000,
+      mapBrightness: 5,
+      baseColor: [0.3, 0.35, 0.5],
+      markerColor: [1.0, 0.5, 0.2],
+      glowColor: [0.2, 0.3, 0.5],
+      opacity: 1,
+      markers: markers,
+      onRender: (state) => {
+        state.phi = phi;
+        phi += 0.002;
+        state.width = canvas.width;
+        state.height = canvas.height;
+      },
+    });
+
+    window.addEventListener('resize', () => {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = container.offsetWidth * dpr;
+      canvas.height = container.offsetHeight * dpr;
+    });
+
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+
+    canvas.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const deltaMove = {
+        x: e.clientX - previousMousePosition.x,
+        y: e.clientY - previousMousePosition.y
+      };
+      phi += deltaMove.x * 0.005;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    });
+
+    canvas.addEventListener('mouseup', () => { isDragging = false; });
+    canvas.addEventListener('mouseleave', () => { isDragging = false; });
+
+    canvas.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const deltaMove = {
+        x: e.touches[0].clientX - previousMousePosition.x,
+        y: e.touches[0].clientY - previousMousePosition.y
+      };
+      phi += deltaMove.x * 0.005;
+      previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    });
+
+    canvas.addEventListener('touchend', () => { isDragging = false; });
+
+    window.addEventListener('beforeunload', () => {
+      globe.destroy();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Icons - 品牌图标库</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      background: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 顶部状态栏 */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e8e6e1;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: #fff;
+      color: #333;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      border: 1px solid #e8e6e1;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .back-button:hover {
+      background: #f5f5f5;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    header h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    header .spacer {
+      flex: 1;
+    }
+
+    .description {
+      font-size: 13px;
+      color: #888;
+      white-space: nowrap;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    .fallback {
+      display: none;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .fallback.show {
+      display: block;
+    }
+
+    .fallback h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #6366f1;
+    }
+
+    .fallback p {
+      margin-bottom: 1.5rem;
+      color: #666;
+    }
+
+    .fallback a {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #6366f1;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .fallback a:hover {
+      background: #4f46e5;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 0 16px;
+        height: 50px;
+      }
+
+      header h1 {
+        font-size: 14px;
+      }
+
+      .description {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" class="back-button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      返回
+    </a>
+    <h1>Simple Icons</h1>
+    <span class="spacer"></span>
+    <span class="description">2000+ 免费品牌图标 SVG</span>
+  </header>
+
+  <main>
+    <iframe
+      id="simple-icons-frame"
+      src="https://simpleicons.org/"
+      title="Simple Icons 品牌图标库"
+      allow="clipboard-write"
+    ></iframe>
+
+    <div class="fallback" id="fallback">
+      <h2>无法加载 Simple Icons</h2>
+      <p>由于跨域限制，无法在 iframe 中加载 Simple Icons 网站。<br>请直接访问官方网站：</p>
+      <a href="https://simpleicons.org/" target="_blank" rel="noopener noreferrer">
+        访问 simpleicons.org →
+      </a>
+    </div>
+  </main>
+
+  <script>
+    // 检测 iframe 是否加载失败
+    const iframe = document.getElementById('simple-icons-frame');
+    const fallback = document.getElementById('fallback');
+
+    iframe.addEventListener('error', () => {
+      iframe.style.display = 'none';
+      fallback.classList.add('show');
+    });
+
+    // 设置超时检测
+    setTimeout(() => {
+      try {
+        // 尝试访问 iframe 内容，如果跨域会抛出异常
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      } catch (e) {
+        // 跨域是正常的，说明 iframe 已加载
+        console.log('Simple Icons loaded successfully');
+      }
+    }, 5000);
+  </script>
+</body>
+</html>

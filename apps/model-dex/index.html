@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模型图鉴 · AI Model Dex</title>
+  <meta name="description" content="AI 模型图鉴 - 基于 Models.dev 的模型列表与详情页">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+  <div class="app">
+    <!-- 顶部导航条 -->
+    <nav class="top-bar">
+      <a href="/" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        返回博客
+      </a>
+      <div class="top-bar-right">
+        <button class="theme-toggle" id="themeToggle" title="切换主题">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <path
+              d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 头部 -->
+    <header class="header">
+      <div class="header-left">
+        <h1 class="app-title">
+          <span class="title-icon">◈</span>
+          模型图鉴
+        </h1>
+        <p class="app-subtitle">AI Model Dex · 基于 <a href="https://models.dev" target="_blank"
+            rel="noopener">Models.dev</a> 开源数据</p>
+      </div>
+      <div class="header-right">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+          <input type="text" id="searchInput" placeholder="搜索模型名称..." autocomplete="off">
+          <kbd class="search-hint">Ctrl K</kbd>
+        </div>
+        <div class="stats" id="statsBar">
+          <span class="stat-item"><strong id="statModels">-</strong> 模型</span>
+          <span class="stat-item"><strong id="statProviders">-</strong> 供应商</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 列表视图 -->
+    <section class="view view-list" id="viewList">
+      <!-- 筛选/排序 -->
+      <div class="toolbar">
+        <div class="filters">
+          <select id="filterLab" class="filter-select">
+            <option value="">全部厂商</option>
+          </select>
+          <div class="capability-filters">
+            <button class="cap-toggle" data-cap="reasoning" title="推理能力">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              推理
+            </button>
+            <button class="cap-toggle" data-cap="tool_call" title="工具调用">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+              </svg>
+              工具
+            </button>
+            <button class="cap-toggle" data-cap="structured_output" title="结构化输出">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" />
+              </svg>
+              结构化
+            </button>
+            <button class="cap-toggle" data-cap="open_weights" title="开放权重">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+              </svg>
+              开源
+            </button>
+          </div>
+        </div>
+        <div class="sort-control">
+          <label>排序：</label>
+          <select id="sortSelect" class="filter-select">
+            <option value="release_date">最新发布</option>
+            <option value="context">上下文长度</option>
+            <option value="cost_input">输入价格 ↑</option>
+            <option value="cost_output">输出价格 ↑</option>
+            <option value="name">名称 A-Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 模型网格 -->
+      <div class="model-grid" id="modelGrid"></div>
+      <div class="empty-state hidden" id="emptyState">
+        <p>😔 没有找到匹配的模型</p>
+        <button class="btn-reset" id="btnReset">重置筛选</button>
+      </div>
+    </section>
+
+    <!-- 详情页 -->
+    <section class="view view-detail hidden" id="viewDetail"></section>
+
+    <!-- 加载中 -->
+    <div class="loading-overlay" id="loading">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <p>正在加载模型数据...</p>
+        <p class="loading-hint">数据来源：models.dev</p>
+      </div>
+    </div>
+
+    <!-- 加载失败 -->
+    <div class="error-overlay hidden" id="error">
+      <div class="error-content">
+        <p class="error-icon">⚠️</p>
+        <p class="error-title">数据加载失败</p>
+        <p class="error-msg" id="errorMsg"></p>
+        <button class="btn-retry" id="btnRetry">重试</button>
+      </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+      <p>模型图鉴 · 数据来自 <a href="https://models.dev" target="_blank" rel="noopener">Models.dev</a> 开源项目</p>
+      <p><a href="/" style="color:inherit;text-decoration:underline">返回博客首页</a></p>
+    </footer>
+  </div>
+
+  <!-- 返回顶部 -->
+  <button class="scroll-top" id="scrollTop" title="返回顶部" aria-label="返回顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </svg>
+  </button>
+
+  <script src="./detail.js"></script>
+  <script src="./app.js"></script>
+</body>
+
+</html>

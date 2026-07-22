@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="每个控件都有自己的名字。用中文描述界面元素，查到准确的中英文名称。" />
+  <meta name="theme-color" content="#0f0f11" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="这个叫啥 — 中文 UI 词典库" />
+  <meta property="og:description" content="每个控件都有自己的名字。查到准确的中英文术语，直接告诉设计师、开发者或 AI 编程助手。" />
+  <title>这个叫啥 — 中文 UI 词典库</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <div class="shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a href="/" class="sidebar-back" title="返回博客首页" aria-label="返回博客首页">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        <span>返回博客</span>
+      </a>
+      <a class="sidebar-logo" href="#top" aria-label="这个叫啥 首页">
+        <span class="logo-full">这个叫啥</span>
+        <span class="logo-short">啥</span>
+        <span class="logo-ui">UI</span>
+      </a>
+
+      <button class="sidebar-search" type="button" data-open-search>
+        <svg aria-hidden="true" viewBox="0 0 16 16">
+          <circle cx="7" cy="7" r="4.5"></circle>
+          <path d="M10.5 10.5 14 14"></path>
+        </svg>
+        <span>搜索术语…</span>
+        <kbd><span>Ctrl</span><span>K</span></kbd>
+      </button>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" type="button" data-nav-filter="全部">
+          <span>全部</span>
+          <small data-filter="全部">60</small>
+        </button>
+        <button class="nav-item" type="button" data-nav-filter="通用 / Web">
+          <span>Web</span>
+          <small data-filter="通用 / Web">29</small>
+        </button>
+        <button class="nav-item" type="button" data-nav-filter="macOS">
+          <span>macOS</span>
+          <small data-filter="macOS">31</small>
+        </button>
+        <button class="nav-item" type="button" data-nav-filter="TDesign">
+          <span>TDesign</span>
+          <small data-filter="TDesign">0</small>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="bookmark-wrap">
+          <button class="sidebar-btn" id="bookmark-site" type="button" aria-label="收藏本站" aria-expanded="false"
+            aria-controls="bookmark-tip" title="收藏本站">
+            <svg aria-hidden="true" viewBox="0 0 16 16">
+              <path d="M4 2.5h8v11l-4-2.7-4 2.7Z"></path>
+            </svg>
+            <span>收藏</span>
+          </button>
+          <span class="bookmark-tip" id="bookmark-tip" role="status" hidden>
+            <strong>收藏本站</strong>
+            <span id="bookmark-instruction">按 Ctrl+D 加入浏览器收藏夹</span>
+          </span>
+        </span>
+        <button class="sidebar-btn" id="share-site" type="button" title="分享网站">
+          <svg aria-hidden="true" viewBox="0 0 16 16">
+            <circle cx="4" cy="8" r="1.7"></circle>
+            <circle cx="12" cy="4" r="1.7"></circle>
+            <circle cx="12" cy="12" r="1.7"></circle>
+            <path d="m5.5 7.2 5-2.4M5.5 8.8l5 2.4"></path>
+          </svg>
+          <span>分享</span>
+        </button>
+        <button class="sidebar-btn" id="theme-toggle" type="button" aria-label="切换浅色主题">
+          <svg class="moon-icon" aria-hidden="true" viewBox="0 0 16 16">
+            <path d="M13.5 9.5A6 6 0 0 1 6.5 2.5a6 6 0 1 0 7 7Z"></path>
+          </svg>
+          <svg class="sun-icon" aria-hidden="true" viewBox="0 0 16 16">
+            <circle cx="8" cy="8" r="2.5"></circle>
+            <path
+              d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M12.95 3.05l-1.06 1.06M4.11 11.89l-1.06 1.06">
+            </path>
+          </svg>
+          <span class="theme-label">主题</span>
+        </button>
+        <!-- <button class="sidebar-btn" id="sidebar-collapse" type="button" aria-label="收起侧边栏">
+          <svg class="chevron-collapse" aria-hidden="true" viewBox="0 0 16 16">
+            <path d="M10 3 5 8l5 5"></path>
+          </svg>
+          <span>收起</span>
+        </button> -->
+      </div>
+    </aside>
+
+    <!-- Mobile bar -->
+    <div class="mobile-bar">
+      <button class="menu-toggle" type="button" aria-label="打开导航">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M3 5h14M3 10h14M3 15h14" />
+        </svg>
+      </button>
+      <a class="mobile-logo" href="#top">这个<b>叫啥</b></a>
+      <button class="mobile-search-btn" type="button" data-open-search aria-label="搜索">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="7" cy="7" r="4.5" />
+          <path d="M10.5 10.5 14 14" />
+        </svg>
+      </button>
+    </div>
+    <div class="backdrop"></div>
+
+    <!-- Main content -->
+    <div class="main-content">
+      <main id="home-view">
+        <span id="top"></span>
+
+        <section class="hero">
+          <h1>每个控件都有自己的名字</h1>
+          <p class="hero-copy">用中文描述你看到的东西，查到准确的中英文术语，直接告诉设计师、开发者或 AI 编程助手。</p>
+        </section>
+
+        <!-- Hidden filter-tabs (JS compat) -->
+        <div class="filter-tabs" role="group" aria-label="筛选术语平台" hidden>
+          <button class="filter-tab active" type="button" data-filter="全部">全部 <small>60</small></button>
+          <button class="filter-tab" type="button" data-filter="通用 / Web">Web <small>29</small></button>
+          <button class="filter-tab" type="button" data-filter="macOS">macOS <small>31</small></button>
+          <button class="filter-tab" type="button" data-filter="TDesign">TDesign <small>0</small></button>
+        </div>
+
+        <section class="dictionary" aria-labelledby="dictionary-title">
+          <div class="term-grid" id="term-grid"></div>
+          <p class="empty-results" id="empty-results" hidden>没有找到匹配的术语，换一种更口语的描述试试。</p>
+        </section>
+      </main>
+
+      <main id="detail-view" hidden>
+        <article class="detail-page">
+          <nav class="breadcrumbs" aria-label="面包屑导航">
+            <a href="#top" data-home-link>索引</a><span>/</span><span id="detail-platform">macOS</span>
+          </nav>
+          <div class="detail-layout">
+            <div class="detail-demo-column">
+              <div class="detail-demo-mat" id="detail-demo"></div>
+            </div>
+            <div class="detail-copy-column">
+              <div class="detail-page-actions">
+                <a href="#top" class="page-action back-to-list">← 返回列表</a>
+                <button class="page-action" id="copy-page" type="button">▣ 复制本页内容</button>
+                <button class="page-action" id="share-page" type="button">↗ 分享</button>
+              </div>
+              <h1 id="detail-title"></h1>
+              <p class="detail-apis" id="detail-apis"></p>
+              <p class="detail-aliases" id="detail-aliases"></p>
+              <aside class="naming-note" id="detail-naming" hidden>
+                <strong>中文名说明</strong>
+                <p id="detail-naming-copy"></p>
+                <div id="detail-sources"></div>
+              </aside>
+              <p class="detail-description" id="detail-description"></p>
+              <section class="detail-section">
+                <h2>结构剖析 — 每一部分都有名字</h2>
+                <div class="anatomy-list" id="detail-anatomy"></div>
+              </section>
+              <section class="detail-section">
+                <h2>实现提示词 — 直接交给编程助手</h2>
+                <div class="copy-block">
+                  <pre id="detail-prompt"></pre><button type="button" data-copy-target="detail-prompt"
+                    aria-label="复制实现提示词">▣</button>
+                </div>
+              </section>
+              <section class="detail-section">
+                <h2>排错提示词 — 出问题时使用</h2>
+                <p class="section-help">复制下面的内容，再补充你看到的现象，让编程助手先排查常见原因。</p>
+                <div class="copy-block">
+                  <pre id="detail-debug"></pre><button type="button" data-copy-target="detail-debug"
+                    aria-label="复制排错提示词">▣</button>
+                </div>
+              </section>
+              <section class="detail-section">
+                <h2>代码中的名称</h2>
+                <p class="section-help">不同框架对同一个控件的称呼可能不同，请选择与你的项目一致的一行。</p>
+                <div class="code-table" id="detail-code"></div>
+              </section>
+              <section class="detail-section">
+                <h2>相关术语</h2>
+                <div class="related-links" id="detail-related"></div>
+              </section>
+            </div>
+          </div>
+        </article>
+      </main>
+
+      <footer>
+        <p>这个叫啥 · 中文 UI 词典库 — <a href="/" style="color:inherit;text-decoration:underline">返回博客首页</a></p>
+        <p>中英文术语对照，让沟通更准确。</p>
+      </footer>
+    </div>
+
+    <button class="back-to-top" id="back-to-top" type="button" aria-label="返回顶部" hidden>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 13V4M3.5 8 8 3.5 12.5 8"/>
+      </svg>
+    </button>
+  </div>
+
+  <dialog class="search-dialog" id="search-dialog">
+    <div class="dialog-shell">
+      <div class="dialog-search-row">
+        <svg aria-hidden="true" viewBox="0 0 16 16">
+          <circle cx="7" cy="7" r="4.5"></circle>
+          <path d="M10.5 10.5 14 14"></path>
+        </svg>
+        <input id="search-input" type="search" autocomplete="off" placeholder="描述界面元素，或输入中英文名称…"
+          aria-label="搜索 UI 术语" />
+        <button class="close-search" type="button" aria-label="关闭搜索">Esc</button>
+      </div>
+      <div class="search-hint" id="search-hint">试试："右键出现的菜单""可以拖动的圆点""文字后面三个点"</div>
+      <div class="search-results" id="search-results"></div>
+    </div>
+  </dialog>
+
+  <script src="./data.js"></script>
+  <script src="./details.js"></script>
+  <script src="./demos.js"></script>
+  <script src="./app.js"></script>
+</body>
+
+</html>

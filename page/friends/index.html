@@ -5,7 +5,13 @@
   var redirectMap = {
     '/page/claude-code-prompt': '/apps/claude-code-prompt/index.html',
     '/page/lithos-hero': '/apps/lithos-hero/index.html',
-    '/page/vanguard': '/apps/vanguard/index.html'
+    '/page/vanguard': '/apps/vanguard/index.html',
+    '/page/ui-dict': '/apps/ui-dict/index.html',
+    '/page/model-dex': '/apps/model-dex/index.html',
+    '/page/cobe': '/apps/cobe/index.html',
+    '/page/pm-skills': '/apps/pm-skills/index.html',
+    '/page/simple-icons': '/apps/simple-icons/index.html',
+    '/page/cook-like-hoc': '/apps/cook-like-hoc/index.html'
   };
 
   function checkAndRedirect() {
@@ -34,149 +40,7 @@
 })();
 </script>
 <script type="module" crossorigin src="/static/js/index_prod-7a7a95b2.js"></script><link rel="stylesheet" href="/static/css/index_prod-477843f6.css"><!-- hexo injector head_end start --><script rel="prefetch" async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/components/prism-core.js" data-manual></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script><script rel="preload" src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script><link rel="stylesheet" href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/themes/prism.min.css"/><link rel="stylesheet" href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"/><link rel="stylesheet" href="https://fonts.loli.net/css?family=Rubik" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo For Dxc" type="application/atom+xml">
-</head><body id="body-container"><noscript><strong>We're sorry but this app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><!-- hexo injector body_end start -->
-<style>
-.click-effect {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  animation: clickEffectAnim 0.8s ease-out forwards;
-}
-
-@keyframes clickEffectAnim {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -150%) scale(1.5);
-    opacity: 0;
-  }
-}
-
-.click-particle {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  animation: particleBurst 0.6s ease-out forwards;
-}
-
-@keyframes particleBurst {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-</style>
-
-<script>
-(function() {
-  // 特效类型：'heart' | 'star' | 'firework' | 'mixed'
-  const EFFECT_TYPE = 'mixed';
-
-  const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd'];
-
-  // 爱心SVG
-  const heartSVG = '<svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
-
-  // 星星SVG
-  const starSVG = '<svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
-
-  function createClickEffect(x, y) {
-    const type = EFFECT_TYPE === 'mixed'
-      ? ['heart', 'star', 'firework'][Math.floor(Math.random() * 3)]
-      : EFFECT_TYPE;
-
-    if (type === 'firework') {
-      createFirework(x, y);
-    } else {
-      createIcon(x, y, type);
-    }
-  }
-
-  function createIcon(x, y, type) {
-    const el = document.createElement('div');
-    el.className = 'click-effect';
-    el.style.left = x + 'px';
-    el.style.top = y + 'px';
-    el.style.color = colors[Math.floor(Math.random() * colors.length)];
-    el.innerHTML = type === 'heart' ? heartSVG : starSVG;
-    document.body.appendChild(el);
-
-    setTimeout(() => el.remove(), 800);
-  }
-
-  function createFirework(x, y) {
-    const particleCount = 8;
-    for (let i = 0; i < particleCount; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'click-particle';
-      particle.style.left = x + 'px';
-      particle.style.top = y + 'px';
-      particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-
-      const angle = (Math.PI * 2 / particleCount) * i;
-      const distance = 30 + Math.random() * 20;
-      const tx = Math.cos(angle) * distance;
-      const ty = Math.sin(angle) * distance;
-
-      particle.style.animation = 'none';
-      document.body.appendChild(particle);
-
-      // 动画
-      particle.animate([
-        { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
-        { transform: 'translate(calc(-50% + ' + tx + 'px), calc(-50% + ' + ty + 'px)) scale(0)', opacity: 0 }
-      ], {
-        duration: 600,
-        easing: 'ease-out'
-      });
-
-      setTimeout(() => particle.remove(), 600);
-    }
-  }
-
-  document.addEventListener('click', function(e) {
-    createClickEffect(e.clientX, e.clientY);
-  });
-})();
-
-// 隐藏友链页面的"随机访问"按钮
-(function() {
-  function hideRandomBtn() {
-    var links = document.querySelectorAll('.link-box-btn-group a');
-    for (var i = 0; i < links.length; i++) {
-      if (links[i].textContent.trim() === '随机访问') {
-        links[i].style.display = 'none';
-      }
-    }
-  }
-  // 页面加载后执行
-  if (document.readyState === 'complete') {
-    setTimeout(hideRandomBtn, 800);
-  } else {
-    window.addEventListener('load', function() {
-      setTimeout(hideRandomBtn, 800);
-    });
-  }
-  // MutationObserver 监听 DOM 变化
-  var observer = new MutationObserver(function() {
-    hideRandomBtn();
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
-  setTimeout(function() { observer.disconnect(); }, 6000);
-})();
-</script>
-<script>
+</head><body id="body-container"><noscript><strong>We're sorry but this app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><!-- hexo injector body_end start --><script>
 (function() {
   function hideRandomBtn() {
     var links = document.querySelectorAll(".link-box-btn-group a");
@@ -357,6 +221,148 @@
   resize();
   initParticles();
   animate();
+})();
+</script>
+
+<style>
+.click-effect {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  animation: clickEffectAnim 0.8s ease-out forwards;
+}
+
+@keyframes clickEffectAnim {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -150%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.click-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: particleBurst 0.6s ease-out forwards;
+}
+
+@keyframes particleBurst {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+</style>
+
+<script>
+(function() {
+  // 特效类型：'heart' | 'star' | 'firework' | 'mixed'
+  const EFFECT_TYPE = 'mixed';
+
+  const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd'];
+
+  // 爱心SVG
+  const heartSVG = '<svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+
+  // 星星SVG
+  const starSVG = '<svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+
+  function createClickEffect(x, y) {
+    const type = EFFECT_TYPE === 'mixed'
+      ? ['heart', 'star', 'firework'][Math.floor(Math.random() * 3)]
+      : EFFECT_TYPE;
+
+    if (type === 'firework') {
+      createFirework(x, y);
+    } else {
+      createIcon(x, y, type);
+    }
+  }
+
+  function createIcon(x, y, type) {
+    const el = document.createElement('div');
+    el.className = 'click-effect';
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.style.color = colors[Math.floor(Math.random() * colors.length)];
+    el.innerHTML = type === 'heart' ? heartSVG : starSVG;
+    document.body.appendChild(el);
+
+    setTimeout(() => el.remove(), 800);
+  }
+
+  function createFirework(x, y) {
+    const particleCount = 8;
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'click-particle';
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+      const angle = (Math.PI * 2 / particleCount) * i;
+      const distance = 30 + Math.random() * 20;
+      const tx = Math.cos(angle) * distance;
+      const ty = Math.sin(angle) * distance;
+
+      particle.style.animation = 'none';
+      document.body.appendChild(particle);
+
+      // 动画
+      particle.animate([
+        { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+        { transform: 'translate(calc(-50% + ' + tx + 'px), calc(-50% + ' + ty + 'px)) scale(0)', opacity: 0 }
+      ], {
+        duration: 600,
+        easing: 'ease-out'
+      });
+
+      setTimeout(() => particle.remove(), 600);
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    createClickEffect(e.clientX, e.clientY);
+  });
+})();
+
+// 隐藏友链页面的"随机访问"按钮
+(function() {
+  function hideRandomBtn() {
+    var links = document.querySelectorAll('.link-box-btn-group a');
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].textContent.trim() === '随机访问') {
+        links[i].style.display = 'none';
+      }
+    }
+  }
+  // 页面加载后执行
+  if (document.readyState === 'complete') {
+    setTimeout(hideRandomBtn, 800);
+  } else {
+    window.addEventListener('load', function() {
+      setTimeout(hideRandomBtn, 800);
+    });
+  }
+  // MutationObserver 监听 DOM 变化
+  var observer = new MutationObserver(function() {
+    hideRandomBtn();
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+  setTimeout(function() { observer.disconnect(); }, 6000);
 })();
 </script>
 <!-- hexo injector body_end end --></body></html>

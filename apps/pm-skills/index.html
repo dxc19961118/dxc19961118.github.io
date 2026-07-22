@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PM Skills | Dxc's Blog</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Geist", "Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      background: #f8f7f4;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 40px 20px;
+      transition: padding-right 0.3s ease;
+    }
+
+    body.drawer-open { overflow: hidden; }
+
+    .back-button {
+      position: fixed; top: 20px; left: 20px; z-index: 10;
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.8); backdrop-filter: blur(10px);
+      border: 1px solid #e8e6e1; border-radius: 8px;
+      color: #737373; text-decoration: none; font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .back-button:hover { background: #fff; color: #1a1a1a; transform: translateX(-4px); }
+    .back-button svg { width: 16px; height: 16px; }
+
+    .container { max-width: 1400px; margin: 0 auto; padding-top: 60px; }
+
+    h1 { text-align: center; font-size: 32px; margin-bottom: 8px; font-weight: 700; letter-spacing: 2px; }
+    .subtitle { text-align: center; color: #737373; font-size: 14px; margin-bottom: 40px; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+    .card {
+      background: #fff; border-radius: 12px; padding: 24px;
+      border-top: 4px solid var(--accent);
+      border: 1px solid #e8e6e1;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      display: flex; flex-direction: column;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,.06), 0 2px 4px rgba(0,0,0,.04);
+      border-color: #d6d3cd;
+    }
+    .card.active { border-color: #6366f1; box-shadow: 0 0 0 2px rgba(99,102,241,.12); }
+
+    .card-header { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+    .card-title-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .card-title { font-size: 16px; font-weight: 700; line-height: 1.3; color: #1a1a1a; }
+    .card-tag {
+      font-size: 10px; padding: 2px 7px; border-radius: 10px;
+      background: #f5f3ef; color: #8a8578;
+      font-family: "Geist Mono", "SFMono-Regular", Consolas, monospace;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .badge { display: inline-block; font-size: 11px; padding: 2px 7px; border-radius: 4px; font-weight: 600; margin-left: 6px; vertical-align: middle; }
+    .badge-updated { background: #6366f1; color: #fff; }
+    .badge-new { background: #22c55e; color: #fff; }
+
+    .card-desc { font-size: 13px; color: #737373; line-height: 1.6; margin-bottom: 16px; flex-grow: 1; }
+    .card-stats { display: flex; gap: 20px; padding-top: 14px; border-top: 1px solid #f0eee9; }
+    .stat-count { color: #dba400; font-size: 22px; font-weight: 700; line-height: 1; }
+    .stat-label { color: #999; font-size: 12px; font-weight: 400; margin-left: 3px; }
+    .stat-change { font-size: 11px; color: #22c55e; vertical-align: super; font-weight: 600; }
+
+    .footer { text-align: center; margin-top: 48px; color: #737373; font-size: 13px; }
+    .footer a { color: #6366f1; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* ===== 如何使用板块 ===== */
+    .howto { margin-top: 64px; border-top: 1px solid #e8e6e1; padding-top: 48px; }
+    .howto h2 { text-align: center; font-size: 24px; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; }
+    .howto .howto-subtitle { text-align: center; color: #737373; font-size: 14px; margin-bottom: 40px; }
+
+    .howto-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+    .howto-card {
+      background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 24px;
+      border-top: 4px solid var(--ht-accent, #6366f1);
+    }
+    .howto-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .howto-card h3 .icon { font-size: 18px; }
+    .howto-card p { font-size: 13px; color: #737373; line-height: 1.7; margin-bottom: 10px; }
+    .howto-card code {
+      font-family: "Geist Mono", "SFMono-Regular", Consolas, monospace;
+      font-size: 12px; background: #f0eee9; padding: 2px 6px; border-radius: 4px; color: #1a1a1a;
+    }
+    .howto-card ol, .howto-card ul { padding-left: 18px; margin: 8px 0; }
+    .howto-card li { font-size: 13px; color: #555; line-height: 1.7; margin-bottom: 4px; }
+
+    .howto-commands { margin-bottom: 40px; }
+    .howto-commands h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+    .cmd-table { width: 100%; border-collapse: collapse; }
+    .cmd-table th {
+      text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+      color: #737373; padding: 8px 12px; border-bottom: 2px solid #e8e6e1; font-weight: 600;
+    }
+    .cmd-table td {
+      padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #f0eee9; vertical-align: top;
+    }
+    .cmd-table td:first-child {
+      font-family: "Geist Mono", "SFMono-Regular", Consolas, monospace;
+      font-size: 12px; white-space: nowrap; color: #6366f1; font-weight: 600;
+    }
+    .cmd-table tr:hover td { background: #fafaf8; }
+
+    .howto-sources { margin-bottom: 40px; }
+    .howto-sources h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+    .source-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; list-style: none; padding: 0; }
+    .source-list li { font-size: 13px; color: #555; line-height: 1.6; }
+    .source-list li strong { color: #1a1a1a; }
+    .source-list a { color: #6366f1; text-decoration: none; }
+    .source-list a:hover { text-decoration: underline; }
+
+    .howto-note {
+      background: #fff; border: 1px solid #e8e6e1; border-radius: 12px; padding: 20px 24px;
+      font-size: 13px; color: #737373; line-height: 1.7;
+      border-left: 4px solid #f0b429;
+    }
+    .howto-note strong { color: #1a1a1a; }
+
+    @media (max-width: 1024px) {
+      .howto-grid { grid-template-columns: repeat(2, 1fr); }
+      .source-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .howto-grid { grid-template-columns: 1fr; }
+      .cmd-table th, .cmd-table td { padding: 8px 6px; font-size: 12px; }
+    }
+
+    /* Drawer Overlay */
+    .drawer-overlay {
+      position: fixed; inset: 0; z-index: 20;
+      background: rgba(0,0,0,0);
+      pointer-events: none;
+      transition: background 0.3s ease;
+    }
+    .drawer-overlay.visible { background: rgba(0,0,0,0.15); pointer-events: auto; }
+
+    /* Drawer */
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 30;
+      width: 580px; max-width: 100vw;
+      background: #fff;
+      border-left: 1px solid #e8e6e1;
+      box-shadow: -4px 0 24px rgba(0,0,0,0.08);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      padding: 36px 36px 48px;
+    }
+    .drawer.open { transform: translateX(0); }
+
+    .drawer-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 36px; height: 36px;
+      display: grid; place-items: center;
+      border: 1px solid #e8e6e1; border-radius: 8px;
+      background: #f8f7f4; color: #737373;
+      cursor: pointer; font-size: 18px;
+      transition: all 0.2s;
+    }
+    .drawer-close:hover { background: #e8e6e1; color: #1a1a1a; }
+
+    .drawer-accent {
+      width: 56px; height: 4px; border-radius: 2px; margin-bottom: 24px;
+    }
+
+    .drawer h2 {
+      font-size: 26px; font-weight: 700; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      line-height: 1.3;
+    }
+    .drawer .drawer-tag {
+      font-size: 12px; padding: 3px 10px; border-radius: 20px;
+      background: #f0eee9; color: #737373;
+      font-family: "Geist Mono", "SFMono-Regular", Consolas, monospace;
+      font-weight: 400;
+    }
+    .drawer .drawer-desc {
+      font-size: 14px; color: #737373; line-height: 1.8;
+      margin: 14px 0 28px;
+    }
+
+    .drawer-stats {
+      display: flex; gap: 28px; margin-bottom: 32px;
+      padding-bottom: 24px; border-bottom: 1px solid #e8e6e1;
+    }
+    .drawer-stats .stat-count { font-size: 32px; }
+
+    .drawer-section { margin-bottom: 28px; }
+    .drawer-section h3 {
+      font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;
+      color: #737373; margin-bottom: 14px; font-weight: 600;
+    }
+
+    .skill-list { list-style: none; }
+    .skill-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #f0eee9;
+      font-size: 14px; line-height: 1.7;
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 0 14px;
+      align-items: baseline;
+    }
+    .skill-list li:last-child { border-bottom: none; }
+    .skill-num {
+      color: #dba400; font-weight: 700; font-size: 13px;
+      grid-column: 1;
+    }
+    .skill-name {
+      font-weight: 600; color: #1a1a1a;
+      grid-column: 2;
+    }
+    .skill-detail {
+      color: #737373;
+      grid-column: 2;
+      margin-top: 2px;
+    }
+
+    .cmd-list { list-style: none; }
+    .cmd-list li {
+      padding: 10px 0; font-size: 14px;
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .cmd-name {
+      font-family: "Geist Mono", "SFMono-Regular", Consolas, monospace;
+      font-size: 13px; background: #f0eee9; padding: 4px 10px;
+      border-radius: 6px; color: #1a1a1a; white-space: nowrap;
+      display: inline-block;
+    }
+    .cmd-desc { color: #737373; font-size: 13px; line-height: 1.5; }
+
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      body.drawer-open { padding-right: 0; }
+      .drawer { width: 100vw; padding: 28px 20px 40px; }
+    }
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .back-button { top: 15px; left: 15px; padding: 8px 12px; font-size: 13px; }
+      h1 { font-size: 24px; }
+      .cmd-list li { grid-template-columns: 1fr; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="/" class="back-button" title="返回博客首页">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    返回首页
+  </a>
+
+  <div class="container">
+    <h1>技能 · 命令 · 插件</h1>
+    <p class="subtitle">Claude Code PM Skills — 产品经理 AI 技能包</p>
+
+    <div class="grid">
+      <div class="card" data-key="discovery" style="--accent:#5b9bd5;">
+        <div class="card-header"><div class="card-title-row"><div class="card-title">Product Discovery · 产品发现</div><span class="card-tag">pm-product-discovery</span></div></div>
+        <div class="card-desc">创意发想、实验设计、假设验证、机会解决方案树、用户访谈与功能优先级排序</div>
+        <div class="card-stats"><span><span class="stat-count">13</span><span class="stat-label">个技能</span></span><span><span class="stat-count">5</span><span class="stat-label">个命令</span></span></div>
+      </div>
+      <div class="card" data-key="strategy" style="--accent:#70ad47;">
+        <div class="card-header"><div class="card-title-row"><div class="card-title">Product Strategy · 产品策略</div><span class="card-tag">pm-product-strategy</span></div></div>
+        <div class="card-desc">愿景规划、商业模式、定价策略、SWOT、PESTLE、波特五力、安索夫矩阵与竞争格局分析</div>
+        <div class="card-stats"><span><span class="stat-count">12</span><span class="stat-label">个技能</span></span><span><span class="stat-count">5</span><span class="stat-label">个命令</span></span></div>
+      </div>
+      <div class="card" data-key="execution" style="--accent:#ed7d31;">
+        <div class="card-header"><div class="card-title-row"><div class="card-title">Execution · 执行交付 <span class="badge badge-updated">已更新</span></div><span class="card-tag">pm-execution</span></div></div>
+        <div class="card-desc">PRD 撰写、OKR 制定、路线图、冲刺规划、复盘、发布说明、预先验尸、干系人地图、用户故事与红队测试</div>
+        <div class="card-stats"><span><span class="stat-count">16</span><span class="stat-change">+1</span><span class="stat-label">个技能</span></span><span><span class="stat-count">11</span><span class="stat-change">+1</span><span class="stat-label">个命令</span></span></div>
+      </div>
+      <div class="card" data-key="research" style="--accent:#7030a0;">
+        <div class="card-header"><div class="card-title-row"><div class="card-title">Market Research · 市场调研</div><span class="card-tag">pm-market-research</span></div></div>
+        <div class="card-desc">用户画像、市场细分、旅程地图、市场规模估算（TAM/SAM/SOM）与竞品分析</div>
+        <div class="card-stats"><span><span class="stat-count">7</span><span class="stat-label">个技能</span></span><span><span class="stat-count">3</span><span class="stat-label">个命令</span></span></div>
+      </div>
+      <div class="card" data-key="analytics" style="--accent:#4472c4;">
+        <div class="card-header"><div class="card-title-row"><div class="card-title">Data Analytics · 数据分析</div><span class="card-tag">pm-data-analytics</span></div></div>
+        <div class="card-desc">SQL 查询生成、同期群分析、留存曲线与 A/B 测试统计分析</div>
+        <div class="card-stats"><span><span class="stat-count">3</span><span class="stat-label">个技能</span></span><span><span class="stat-count">3</span><span class="stat-label">个命令</span></span></div>
+      </div>
+      <div class="card" data-key="gtm" style="--accent:#2e75b6;">
+        <div class="card-header"><div class="card-title-row"><div class="card-title">Go-to-Market · 上市策略</div><span class="card-tag">pm-go-to-market</span></div></div>
+        <div class="card-desc">GTM 策略、滩头阵地细分、理想客户画像、增长飞轮、上市动作与竞品对战卡</div>
+        <div class="card-stats"><span><span class="stat-count">6</span><span class="stat-label">个技能</span></span><span><span class="stat-count">3</span><span class="stat-label">个命令</span></span></div>
+      </div>
+      <div class="card" data-key="marketing" style="--accent:#e06c9f;">
+        <div class="card-header"><div class="card-title-row"><div class="card-title">Marketing & Growth · 营销增长</div><span class="card-tag">pm-marketing-growth</span></div></div>
+        <div class="card-desc">营销创意、定位策略、价值主张、产品命名与北极星指标</div>
+        <div class="card-stats"><span><span class="stat-count">5</span><span class="stat-label">个技能</span></span><span><span class="stat-count">2</span><span class="stat-label">个命令</span></span></div>
+      </div>
+      <div class="card" data-key="toolkit" style="--accent:#9b59b6;">
+        <div class="card-header"><div class="card-title-row"><div class="card-title">PM Toolkit · 效率工具包</div><span class="card-tag">pm-toolkit</span></div></div>
+        <div class="card-desc">简历优化、NDA 起草、隐私政策撰写与语法/行文检查</div>
+        <div class="card-stats"><span><span class="stat-count">4</span><span class="stat-label">个技能</span></span><span><span class="stat-count">5</span><span class="stat-label">个命令</span></span></div>
+      </div>
+      <div class="card" data-key="shipping" style="--accent:#f0b429;">
+        <div class="card-header"><div class="card-title-row"><div class="card-title">AI Shipping Kit · 交付工具包 <span class="badge badge-new">新增</span></div><span class="card-tag">pm-ai-shipping</span></div></div>
+        <div class="card-desc">为 AI 生成的应用编写文档、审计安全与性能是否符合预期，并打包交付给评审方</div>
+        <div class="card-stats"><span><span class="stat-count">2</span><span class="stat-label">个技能</span></span><span><span class="stat-count">5</span><span class="stat-label">个命令</span></span></div>
+      </div>
+    </div>
+
+    <!-- ===== 如何使用 ===== -->
+    <div class="howto">
+      <h2>如何使用</h2>
+      <p class="howto-subtitle">PM Skills 是 AI Agent 的产品经理技能包，适配多种工具</p>
+
+      <div class="howto-grid">
+        <!-- Claude Cowork -->
+        <div class="howto-card" style="--ht-accent:#6366f1;">
+          <h3><span class="icon">🤖</span> Claude Cowork（推荐非开发者）</h3>
+          <ol>
+            <li>点击左下角 <strong>Customize</strong></li>
+            <li>进入 <strong>Browse plugins</strong> → <strong>Personal</strong> → <strong>+</strong></li>
+            <li>选择 <strong>Add marketplace from GitHub</strong></li>
+            <li>输入 <code>phuryn/pm-skills</code></li>
+          </ol>
+          <p>9 个插件全部自动安装，命令和技能即刻可用。</p>
+        </div>
+
+        <!-- Claude Code CLI -->
+        <div class="howto-card" style="--ht-accent:#22c55e;">
+          <h3><span class="icon">️</span> Claude Code（CLI）</h3>
+          <ol>
+            <li>添加市场源：<code>claude plugin marketplace add phuryn/pm-skills</code></li>
+            <li>按需安装插件：<code>claude plugin install pm-toolkit@pm-skills</code></li>
+          </ol>
+          <p>可逐个安装，也可一次安装全部 9 个插件。安装后在对话中使用 <code>/命令名</code> 即可触发工作流。</p>
+        </div>
+
+        <!-- Codex CLI -->
+        <div class="howto-card" style="--ht-accent:#f0b429;">
+          <h3><span class="icon">🧠</span> Codex CLI（OpenAI）</h3>
+          <ol>
+            <li>添加市场源：<code>codex plugin marketplace add phuryn/pm-skills</code></li>
+            <li>安装插件：<code>codex plugin add pm-toolkit@pm-skills</code></li>
+          </ol>
+          <p>Codex 读取相同的市场文件，无需转换。但 <code>/</code> 斜杠命令不会作为 Codex 命令运行——用自然语言描述步骤即可触发相同工作流。</p>
+        </div>
+
+        <!-- 其他 AI 工具 -->
+        <div class="howto-card" style="--ht-accent:#e06c9f;">
+          <h3><span class="icon">🔌</span> 其他 AI 助手（仅技能）</h3>
+          <p><code>SKILL.md</code> 文件遵循通用技能格式，支持：</p>
+          <ul>
+            <li><strong>Gemini CLI</strong> → 复制到 <code>.gemini/skills/</code></li>
+            <li><strong>Cursor</strong> → 复制到 <code>.cursor/skills/</code></li>
+            <li><strong>OpenCode</strong> → 复制到 <code>.opencode/skills/</code></li>
+            <li><strong>Kiro</strong> → 复制到 <code>.kiro/skills/</code></li>
+          </ul>
+          <p>斜杠命令是 Claude 特有的，其他工具仅支持技能。</p>
+        </div>
+
+        <!-- 工作原理 -->
+        <div class="howto-card" style="--ht-accent:#5b9bd5;">
+          <h3><span class="icon">⚙️</span> 工作原理</h3>
+          <p><strong>技能（Skills）</strong>：每个技能编码一个经过验证的 PM 框架（发现、假设映射、优先级排序、策略等），提供领域知识和分析框架。</p>
+          <p><strong>命令（Commands）</strong>：用 <code>/命令名</code> 触发的端到端工作流，串联一个或多个技能。例如 <code>/discover</code> 串联了 4 个技能。</p>
+          <p><strong>插件（Plugins）</strong>：将相关技能和命令打包成可安装单元，每个插件覆盖一个 PM 领域。</p>
+        </div>
+
+        <!-- 技能自动加载 -->
+        <div class="howto-card" style="--ht-accent:#7030a0;">
+          <h3><span class="icon">💡</span> 技能自动加载</h3>
+          <p>技能会在对话相关时<strong>自动加载</strong>，无需手动调用。</p>
+          <p>如需强制加载（例如让技能优先于通用知识），可使用：</p>
+          <ul>
+            <li><code>/插件名:技能名</code> — 精确加载</li>
+            <li><code>/技能名</code> — Claude 会自动补全前缀</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 快速命令参考 -->
+      <div class="howto-commands">
+        <h3>快速开始 — 常用命令速查</h3>
+        <table class="cmd-table">
+          <thead>
+            <tr><th>命令</th><th>用途</th><th>示例</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>/discover</td><td>完整产品发现周期：创意 → 假设 → 优先级 → 实验</td><td><code>/discover AI 会议摘要工具</code></td></tr>
+            <tr><td>/strategy</td><td>创建完整的 9 模块产品策略画布</td><td><code>/strategy B2B 项目管理工具</code></td></tr>
+            <tr><td>/write-prd</td><td>从功能想法或问题描述生成 PRD</td><td><code>/write-prd 智能通知系统减少警报疲劳</code></td></tr>
+            <tr><td>/plan-launch</td><td>完整 GTM 策略：从滩头阵地到上市计划</td><td><code>/plan-launch AI 代码审查工具</code></td></tr>
+            <tr><td>/north-star</td><td>定义北极星指标及输入指标</td><td><code>/north-star 双边自由职业者市场</code></td></tr>
+            <tr><td>/brainstorm</td><td>多维度创意发想（想法/实验 × 已有/新产品）</td><td><code>/brainstorm experiments existing</code></td></tr>
+            <tr><td>/competitive-analysis</td><td>竞争格局分析</td><td><code>/competitive-analysis Figma 竞品</code></td></tr>
+            <tr><td>/sprint</td><td>冲刺生命周期（计划/复盘/发布）</td><td><code>/sprint retro</code></td></tr>
+            <tr><td>/ship-check</td><td>将 vibe-coded 仓库整理为可交付审阅包</td><td><code>/ship-check 支付服务</code></td></tr>
+            <tr><td>/review-resume</td><td>PM 简历全面审查</td><td><code>/review-resume [附上简历]</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 理论来源 -->
+      <div class="howto-sources">
+        <h3>理论来源</h3>
+        <ul class="source-list">
+          <li><strong>Teresa Torres</strong> — <em>Continuous Discovery Habits</em>（持续发现习惯）</li>
+          <li><strong>Marty Cagan</strong> — <em>INSPIRED</em> &amp; <em>TRANSFORMED</em>（启示录）</li>
+          <li><strong>Alberto Savoia</strong> — <em>The Right It</em>（正确的它）</li>
+          <li><strong>Dan Olsen</strong> — <em>The Lean Product Playbook</em>（精益产品手册）</li>
+          <li><strong>Roger L. Martin</strong> — <em>Playing to Win</em>（战略竞争）</li>
+          <li><strong>Ash Maurya</strong> — <em>Running Lean</em>（精益创业）</li>
+          <li><strong>Strategyzer</strong> — <em>Business Model Generation</em>（商业模式新生代）</li>
+          <li><strong>Christina Wodtke</strong> — <em>Radical Focus</em>（激进聚焦）</li>
+          <li><strong>Anthony W. Ulwick</strong> — <em>Jobs to Be Done</em>（待办任务）</li>
+          <li><strong>Sean Ellis</strong> — <em>Hacking Growth</em>（增长黑客）</li>
+        </ul>
+      </div>
+
+      <div class="howto-note">
+        <strong>💡 提示：</strong>命令设计为可互相衔接，符合产品经理的实际工作流程。每个命令完成后会建议相关的下一步命令，跟随提示即可。技能文件由 <a href="https://github.com/phuryn/pm-skills" target="_blank" rel="noopener">Paweł Huryn</a> 基于上述经典著作整理策划。
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>&#11088; 更多技能即将上线。关注并 Star </span>
+      <a href="https://github.com/phuryn/pm-skills" target="_blank" rel="noopener">github.com/phuryn/pm-skills</a>
+      <span> 获取最新动态。</span>
+    </div>
+  </div>
+
+  <!-- Drawer Overlay -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+
+  <!-- Drawer -->
+  <div class="drawer" id="drawer">
+    <button class="drawer-close" id="drawer-close" aria-label="关闭">✕</button>
+    <div class="drawer-accent" id="drawer-accent"></div>
+    <h2 id="drawer-title"></h2>
+    <p class="drawer-desc" id="drawer-desc"></p>
+    <div class="drawer-stats" id="drawer-stats"></div>
+    <div class="drawer-section">
+      <h3>技能列表</h3>
+      <ul class="skill-list" id="drawer-skills"></ul>
+    </div>
+    <div class="drawer-section">
+      <h3>可用命令</h3>
+      <ul class="cmd-list" id="drawer-commands"></ul>
+    </div>
+  </div>
+
+  <script>
+    const skillData = {
+      discovery: {
+        accent: '#5b9bd5',
+        title: 'Product Discovery · 产品发现',
+        tag: 'pm-product-discovery',
+        desc: '覆盖从想法产生到功能排序的完整产品发现流程，帮助你验证假设、理解用户，并做出正确的产品决策。',
+        skills: 13, commands: 5,
+        skillsList: [
+          { name: 'Ideation · 创意发想', detail: '系统化生成产品创意，涵盖头脑风暴、SCAMPER 等方法' },
+          { name: 'Experiments · 实验设计', detail: '设计并运行产品实验，验证关键假设' },
+          { name: 'Assumption Testing · 假设验证', detail: '识别和测试产品假设，降低不确定性' },
+          { name: 'Opportunity Solution Tree · 机会解决方案树', detail: '构建机会-解决方案树，梳理问题空间' },
+          { name: 'Customer Interviews · 用户访谈', detail: '结构化用户访谈，挖掘真实需求' },
+          { name: 'Feature Prioritization · 功能优先级', detail: 'RICE、MoSCoW 等多维度功能优先级排序' },
+          { name: 'Jobs to Be Done · 待办任务', detail: '用 JTBD 框架理解用户动机' },
+          { name: 'Problem Framing · 问题定义', detail: '精准定义问题，避免解错问题' },
+          { name: 'Discovery Sprint · 发现冲刺', detail: '快速 Discovery 冲刺流程' },
+          { name: 'Prototype Testing · 原型测试', detail: '原型设计与用户测试方法' },
+          { name: 'Impact Mapping · 影响地图', detail: '影响地图规划产品方向' },
+          { name: 'User Story Mapping · 用户故事地图', detail: '用户故事地图梳理产品全貌' },
+          { name: 'Hypothesis Backlog · 假设待办', detail: '假设驱动的需求管理方法' },
+        ],
+        cmdList: [
+          { name: 'pm-product-discovery', desc: '启动产品发现工作流' },
+          { name: 'pm-ideation', desc: '创意发想会话' },
+          { name: 'pm-experiment', desc: '设计产品实验' },
+          { name: 'pm-interview', desc: '用户访谈指南生成' },
+          { name: 'pm-prioritize', desc: '功能优先级排序' },
+        ],
+      },
+      strategy: {
+        accent: '#70ad47',
+        title: 'Product Strategy · 产品策略',
+        tag: 'pm-product-strategy',
+        desc: '从愿景到竞争分析的全套战略工具，帮助产品管理者制定清晰的产品方向和商业模式。',
+        skills: 12, commands: 5,
+        skillsList: [
+          { name: 'Vision · 产品愿景', detail: '产品愿景定义与传达' },
+          { name: 'Business Models · 商业模式', detail: '商业模式画布与分析' },
+          { name: 'Pricing · 定价策略', detail: '定价策略设计与优化' },
+          { name: 'SWOT · 态势分析', detail: '优势、劣势、机会、威胁分析' },
+          { name: 'PESTLE · 宏观环境', detail: '宏观环境六维度分析' },
+          { name: "Porter's Five Forces · 波特五力", detail: '波特五力竞争分析框架' },
+          { name: 'Ansoff Matrix · 安索夫矩阵', detail: '安索夫矩阵增长策略' },
+          { name: 'Competitive Landscape · 竞争格局', detail: '竞争格局全面分析' },
+          { name: 'Product Roadmap · 产品路线图', detail: '产品路线图规划' },
+          { name: 'OKR for Product · 产品 OKR', detail: '产品 OKR 制定方法' },
+          { name: 'Market Positioning · 市场定位', detail: '市场定位策略' },
+          { name: 'Blue Ocean · 蓝海战略', detail: '蓝海战略分析' },
+        ],
+        cmdList: [
+          { name: 'pm-strategy', desc: '启动产品战略工作流' },
+          { name: 'pm-vision', desc: '产品愿景定义' },
+          { name: 'pm-swot', desc: 'SWOT 分析生成' },
+          { name: 'pm-pricing', desc: '定价策略建议' },
+          { name: 'pm-competitive', desc: '竞品分析' },
+        ],
+      },
+      execution: {
+        accent: '#ed7d31',
+        title: 'Execution · 执行交付',
+        tag: 'pm-execution', badge: '已更新', badgeType: 'updated',
+        desc: '从 PRD 到交付的完整执行工具箱，覆盖文档、流程、复盘与风险管理全流程。',
+        skills: 16, commands: 11, skillChange: 1, cmdChange: 1,
+        skillsList: [
+          { name: 'PRD · 需求文档', detail: '产品需求文档撰写模板与最佳实践' },
+          { name: 'OKR · 目标管理', detail: '目标与关键结果制定和跟踪' },
+          { name: 'Roadmap · 路线图', detail: '路线图规划与可视化' },
+          { name: 'Sprint Planning · 冲刺规划', detail: '冲刺规划与任务拆分' },
+          { name: 'Retrospective · 复盘', detail: '复盘流程与改进方案' },
+          { name: 'Release Notes · 发布说明', detail: '发布说明撰写规范' },
+          { name: 'Pre-mortem · 预先验尸', detail: '预先验尸风险分析法' },
+          { name: 'Stakeholder Map · 干系人地图', detail: '干系人识别与管理策略' },
+          { name: 'User Stories · 用户故事', detail: '用户故事编写与验收标准' },
+          { name: 'Red-teaming · 红队测试', detail: '红队测试与挑战性审查' },
+          { name: 'Change Management · 变更管理', detail: '变更管理流程' },
+          { name: 'Definition of Done · 完成标准', detail: '完成标准制定' },
+          { name: 'Sprint Review · 冲刺评审', detail: '冲刺评审会议组织' },
+          { name: 'Backlog Grooming · 需求梳理', detail: '需求梳理与细化' },
+          { name: 'Velocity Tracking · 速率跟踪', detail: '团队速率跟踪' },
+          { name: 'Risk Register · 风险登记', detail: '风险登记与管理' },
+        ],
+        cmdList: [
+          { name: 'pm-execution', desc: '启动执行工作流' },
+          { name: 'pm-prd', desc: '生成 PRD 文档' },
+          { name: 'pm-okr', desc: '制定 OKR' },
+          { name: 'pm-roadmap', desc: '生成路线图' },
+          { name: 'pm-sprint', desc: '冲刺规划' },
+          { name: 'pm-retro', desc: '复盘会议' },
+          { name: 'pm-release', desc: '发布说明' },
+          { name: 'pm-premortem', desc: '预先验尸' },
+          { name: 'pm-stakeholder', desc: '干系人地图' },
+          { name: 'pm-userstory', desc: '用户故事' },
+          { name: 'pm-redteam', desc: '红队测试' },
+        ],
+      },
+      research: {
+        accent: '#7030a0',
+        title: 'Market Research · 市场调研',
+        tag: 'pm-market-research',
+        desc: '从用户画像到竞品分析的市场调研工具集，帮你全面理解市场和用户。',
+        skills: 7, commands: 3,
+        skillsList: [
+          { name: 'Personas · 用户画像', detail: '用户画像构建方法' },
+          { name: 'Segmentation · 市场细分', detail: '市场细分策略' },
+          { name: 'Journey Maps · 旅程地图', detail: '用户旅程地图绘制' },
+          { name: 'TAM/SAM/SOM · 市场规模', detail: '市场规模三层估算法' },
+          { name: 'Competitor Analysis · 竞品分析', detail: '竞品深度分析方法' },
+          { name: 'Survey Design · 问卷设计', detail: '问卷设计与投放策略' },
+          { name: 'Focus Groups · 焦点小组', detail: '焦点小组组织方法' },
+        ],
+        cmdList: [
+          { name: 'pm-research', desc: '启动市场调研工作流' },
+          { name: 'pm-persona', desc: '生成用户画像' },
+          { name: 'pm-competitor', desc: '竞品分析' },
+        ],
+      },
+      analytics: {
+        accent: '#4472c4',
+        title: 'Data Analytics · 数据分析',
+        tag: 'pm-data-analytics',
+        desc: '数据驱动决策的分析工具，从 SQL 到 A/B 测试的完整数据分析能力。',
+        skills: 3, commands: 3,
+        skillsList: [
+          { name: 'SQL Generation · SQL 生成', detail: '自然语言转 SQL 查询' },
+          { name: 'Cohort Analysis · 同期群分析', detail: '同期群分析方法与留存分析' },
+          { name: 'A/B Testing · A/B 测试', detail: 'A/B 测试设计与统计分析' },
+        ],
+        cmdList: [
+          { name: 'pm-analytics', desc: '启动数据分析工作流' },
+          { name: 'pm-sql', desc: '生成 SQL 查询' },
+          { name: 'pm-abtest', desc: 'A/B 测试设计' },
+        ],
+      },
+      gtm: {
+        accent: '#2e75b6',
+        title: 'Go-to-Market · 上市策略',
+        tag: 'pm-go-to-market',
+        desc: '从策略到执行的产品上市全套方案，帮助你成功将产品推向市场。',
+        skills: 6, commands: 3,
+        skillsList: [
+          { name: 'GTM Strategy · GTM 策略', detail: '上市策略规划框架' },
+          { name: 'Beachhead Segments · 滩头阵地', detail: '滩头阵地市场选择' },
+          { name: 'ICP · 理想客户画像', detail: '理想客户画像定义' },
+          { name: 'Growth Loops · 增长飞轮', detail: '增长飞轮设计' },
+          { name: 'GTM Motions · 上市模式', detail: 'PLG、SLG、MLG 等上市模式' },
+          { name: 'Battlecards · 对战卡', detail: '竞品对战卡制作' },
+        ],
+        cmdList: [
+          { name: 'pm-gtm', desc: '启动上市策略工作流' },
+          { name: 'pm-icp', desc: '理想客户画像' },
+          { name: 'pm-battlecard', desc: '生成对战卡' },
+        ],
+      },
+      marketing: {
+        accent: '#e06c9f',
+        title: 'Marketing & Growth · 营销增长',
+        tag: 'pm-marketing-growth',
+        desc: '营销创意到增长指标的完整工具，帮助产品实现用户增长和品牌建设。',
+        skills: 5, commands: 2,
+        skillsList: [
+          { name: 'Marketing Ideas · 营销创意', detail: '营销创意生成方法' },
+          { name: 'Positioning · 定位策略', detail: '产品定位策略' },
+          { name: 'Value Proposition · 价值主张', detail: '价值主张设计' },
+          { name: 'Product Naming · 产品命名', detail: '产品命名方法论' },
+          { name: 'North Star Metrics · 北极星指标', detail: '北极星指标定义与追踪' },
+        ],
+        cmdList: [
+          { name: 'pm-marketing', desc: '启动营销工作流' },
+          { name: 'pm-positioning', desc: '定位策略生成' },
+        ],
+      },
+      toolkit: {
+        accent: '#9b59b6',
+        title: 'PM Toolkit · 效率工具包',
+        tag: 'pm-toolkit',
+        desc: '产品经理日常实用工具集，从简历到法律文档的一站式支持。',
+        skills: 4, commands: 5,
+        skillsList: [
+          { name: 'Resume Review · 简历审查', detail: '简历审查与优化建议' },
+          { name: 'NDA Drafting · NDA 起草', detail: '保密协议起草' },
+          { name: 'Privacy Policies · 隐私政策', detail: '隐私政策撰写' },
+          { name: 'Grammar Check · 语法检查', detail: '语法与行文检查' },
+        ],
+        cmdList: [
+          { name: 'pm-resume', desc: '简历优化' },
+          { name: 'pm-nda', desc: 'NDA 起草' },
+          { name: 'pm-privacy', desc: '隐私政策' },
+          { name: 'pm-grammar', desc: '语法检查' },
+          { name: 'pm-writing', desc: '行文优化' },
+        ],
+      },
+      shipping: {
+        accent: '#f0b429',
+        title: 'AI Shipping Kit · 交付工具包',
+        tag: 'pm-ai-shipping', badge: '新增', badgeType: 'new',
+        desc: '为 AI 辅助开发的应用提供文档、审计和交付的完整工具包。',
+        skills: 2, commands: 5,
+        skillsList: [
+          { name: 'App Documentation · 应用文档', detail: '为 AI 生成的应用编写完整技术文档' },
+          { name: 'Security & Performance Audit · 安全性能审计', detail: '审计应用安全与性能是否符合预期行为' },
+        ],
+        cmdList: [
+          { name: 'pm-doc', desc: '生成应用文档' },
+          { name: 'pm-audit', desc: '安全与性能审计' },
+          { name: 'pm-ship', desc: '打包交付' },
+          { name: 'pm-review', desc: '评审准备' },
+          { name: 'pm-compliance', desc: '合规检查' },
+        ],
+      },
+    };
+
+    const overlay = document.getElementById('drawer-overlay');
+    const drawer = document.getElementById('drawer');
+    const closeBtn = document.getElementById('drawer-close');
+
+    function openDrawer(key) {
+      const d = skillData[key];
+      if (!d) return;
+
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+      document.querySelector(`.card[data-key="${key}"]`).classList.add('active');
+
+      document.getElementById('drawer-accent').style.background = d.accent;
+
+      let badgeHtml = d.badge
+        ? `<span class="badge badge-${d.badgeType}">${d.badge}</span>`
+        : '';
+      document.getElementById('drawer-title').innerHTML =
+        `${d.title} ${badgeHtml} <span class="drawer-tag">${d.tag}</span>`;
+      document.getElementById('drawer-desc').textContent = d.desc;
+
+      const changeLabel = (base, change) => change ? `${base}<span class="stat-change">+${change}</span>` : base;
+      document.getElementById('drawer-stats').innerHTML = `
+        <span><span class="stat-count">${changeLabel(d.skills, d.skillChange)}</span><span class="stat-label">个技能</span></span>
+        <span><span class="stat-count">${changeLabel(d.commands, d.cmdChange)}</span><span class="stat-label">个命令</span></span>`;
+
+      document.getElementById('drawer-skills').innerHTML = d.skillsList.map((s, i) =>
+        `<li><span class="skill-num">${String(i+1).padStart(2,'0')}</span><span class="skill-name">${s.name}</span><span class="skill-detail">${s.detail}</span></li>`
+      ).join('');
+
+      document.getElementById('drawer-commands').innerHTML = d.cmdList.map(c =>
+        `<li><span class="cmd-name">${c.name}</span><span class="cmd-desc">${c.desc}</span></li>`
+      ).join('');
+
+      drawer.classList.add('open');
+      overlay.classList.add('visible');
+      document.body.classList.add('drawer-open');
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      overlay.classList.remove('visible');
+      document.body.classList.remove('drawer-open');
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    }
+
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => openDrawer(card.dataset.key));
+    });
+
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+  </script>
+</body>
+</html>
