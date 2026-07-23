@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windows XP 怀旧模拟器 · 2005</title>
+<link rel="stylesheet" href="css/xp.css">
+</head>
+<body>
+
+<!-- ============ 开机画面 ============ -->
+<div id="boot" class="boot">
+  <div class="boot-logo">
+    <div class="boot-flag"><i></i><i></i><i></i><i></i></div>
+    <div class="boot-title">Microsoft<sup>®</sup> Windows<sup>®</sup> XP</div>
+    <div class="boot-sub">怀旧模拟版 · 2005</div>
+  </div>
+  <div class="boot-progress"><div class="boot-bar"><span></span><span></span><span></span></div></div>
+</div>
+
+<!-- ============ 登录界面 ============ -->
+<div id="login" class="login hidden">
+  <div class="login-left">
+    <div class="login-brand">
+      <div class="boot-flag small"><i></i><i></i><i></i><i></i></div>
+      <div>windows<sup>xp</sup></div>
+    </div>
+    <div class="login-tip">要开始，请单击您的用户名</div>
+  </div>
+  <div class="login-right">
+    <div class="login-user" id="loginUser">
+      <div class="login-avatar">👤</div>
+      <div class="login-name">Administrator</div>
+      <div class="login-desc">欢迎来到我的 XP 小天地</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 桌面 ============ -->
+<div id="desktop" class="desktop hidden">
+  <div class="xp-icons" id="icons"></div>
+  <div id="windows"></div>
+  <div id="buildStamp" style="position:absolute;right:8px;bottom:38px;color:rgba(255,255,255,.65);font-size:11px;text-shadow:1px 1px 1px rgba(0,0,0,.5);z-index:2;pointer-events:none;">Blog Edition</div>
+
+  <!-- 开始菜单 -->
+  <div class="start-menu hidden" id="startMenu">
+    <div class="sm-header">
+      <div class="sm-avatar">👤</div>
+      <div class="sm-user">Administrator</div>
+    </div>
+    <div class="sm-body">
+      <div class="sm-left">
+        <div class="sm-pinned" id="smPinned"></div>
+        <div class="sm-sep"></div>
+        <div class="sm-allprograms" id="smAllPrograms">所有程序 ▸</div>
+      </div>
+      <div class="sm-right" id="smRight"></div>
+    </div>
+    <div class="sm-footer">
+      <div class="sm-foot-btn" id="smLogoff">⏻ 注销</div>
+      <div class="sm-foot-btn" id="smShutdown">⏻ 关闭计算机</div>
+    </div>
+  </div>
+
+  <!-- 任务栏 -->
+  <div class="taskbar" id="taskbar">
+    <button class="start-btn" id="startBtn"><span class="start-flag"><i></i><i></i><i></i><i></i></span>开始</button>
+    <div class="quicklaunch" id="quicklaunch"></div>
+    <div class="task-buttons" id="taskButtons"></div>
+    <div class="tray" id="tray">
+      <span class="tray-icons" id="trayIcons"></span>
+      <span class="clock" id="clock">12:00</span>
+    </div>
+  </div>
+</div>
+
+<!-- 关机画面 -->
+<div id="shutdown" class="shutdown hidden"><div class="shutdown-text">正在保存设置…</div></div>
+
+<script src="js/core.js?v=1"></script>
+<script src="js/apps/system.js?v=1"></script>
+<script src="js/apps/notepad.js?v=1"></script>
+<script src="js/apps/minesweeper.js?v=1"></script>
+<script src="js/apps/paint.js?v=1"></script>
+<script src="js/apps/qq.js?v=1"></script>
+<script src="js/apps/ie.js?v=1"></script>
+<script src="js/apps/ttplayer.js?v=1"></script>
+<script src="js/apps/wendao.js?v=1"></script>
+<script src="js/apps/vicecity.js?v=1"></script>
+<script src="js/apps/spider.js?v=1"></script>
+<script src="js/apps/rising.js?v=1"></script>
+<script src="js/apps/qzone.js?v=1"></script>
+<script src="js/apps/qmail.js?v=1"></script>
+<script src="js/apps/qpet.js?v=1"></script>
+<script src="js/apps/xunlei.js?v=1"></script>
+<script src="js/apps/powershell.js?v=1"></script>
+<script src="js/apps/ra2.js?v=1"></script>
+
+<!-- 返回博客按钮 -->
+<style>
+.back-button {
+  position: fixed; top: 12px; right: 12px; z-index: 9999;
+  padding: 6px 14px; background: rgba(255,255,255,.92); color: #0050d0;
+  text-decoration: none; border-radius: 4px; font-weight: bold;
+  font-size: 12px; border: 1px solid #0058e6;
+  box-shadow: 1px 1px 4px rgba(0,0,0,.3);
+  transition: all .2s ease; display: flex; align-items: center; gap: 5px;
+  font-family: Tahoma, "Microsoft YaHei", sans-serif;
+  opacity: 0; pointer-events: none;
+}
+.back-button.visible { opacity: 1; pointer-events: auto; }
+.back-button:hover { background: #0058e6; color: #fff; }
+.back-button svg { width: 14px; height: 14px; }
+</style>
+<a href="/" class="back-button" id="backBtn" title="返回博客首页">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M19 12H5M12 19l-7-7 7-7"/>
+  </svg>
+  返回博客
+</a>
+<script>
+(function(){
+  var btn = document.getElementById('backBtn');
+  var obs = new MutationObserver(function(){
+    var desktop = document.getElementById('desktop');
+    if(desktop && !desktop.classList.contains('hidden')) btn.classList.add('visible');
+  });
+  obs.observe(document.getElementById('desktop'), {attributes:true, attributeFilter:['class']});
+})();
+</script>
+</body>
+</html>

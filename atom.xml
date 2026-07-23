@@ -437,9 +437,9 @@
     
     <category term="AI" scheme="http://example.com/tags/AI/"/>
     
-    <category term="向量数据库" scheme="http://example.com/tags/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
     <category term="RAG" scheme="http://example.com/tags/RAG/"/>
+    
+    <category term="向量数据库" scheme="http://example.com/tags/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     <category term="Embedding" scheme="http://example.com/tags/Embedding/"/>
     
