@@ -1,3 +1,6 @@
+http://example.com/post/110%E6%B0%B8%E8%BF%9C%E5%B9%B2%E4%B8%8D%E7%BF%BB985.html
+http://example.com/post/Docker%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html
+http://example.com/post/%E6%A2%81%E6%96%87%E9%94%8B%E6%8A%95%E8%B5%84%E8%80%85%E4%BA%A4%E6%B5%81%E4%BC%9A%E5%AF%B9%E6%95%99%E8%82%B2%E7%9A%84%E5%90%AF%E7%A4%BA.html
 http://example.com/friends/index.html
 http://example.com/post/Skills-sh-Vercel%E6%8E%A8%E5%87%BA%E7%9A%84AI-Agent%E6%8A%80%E8%83%BD%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F.html
 http://example.com/post/RustFS-MinIO%E6%94%B6%E8%B4%B9%E5%90%8E%E7%9A%84%E5%BC%80%E6%BA%90%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%9B%BF%E4%BB%A3%E6%96%B9%E6%A1%88.html
@@ -171,6 +174,12 @@ http://example.com/tags/%E5%91%A8%E6%9C%9F/
 http://example.com/tags/%E6%95%88%E7%8E%87/
 http://example.com/tags/%E6%B2%9F%E9%80%9A/
 http://example.com/tags/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86/
+http://example.com/tags/%E6%B7%B1%E5%BA%A6%E6%80%9D%E8%80%83/
+http://example.com/tags/Docker/
+http://example.com/tags/%E5%AE%B9%E5%99%A8%E5%8C%96/
+http://example.com/tags/DevOps/
+http://example.com/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/
+http://example.com/tags/%E9%AB%98%E8%80%83%E5%BF%97%E6%84%BF/
 http://example.com/categories/AI/
 http://example.com/categories/%E8%81%8C%E5%9C%BA/
 http://example.com/categories/Claude-Code/
@@ -192,3 +201,6 @@ http://example.com/categories/%E6%8A%95%E8%B5%84/
 http://example.com/categories/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/
 http://example.com/categories/%E6%A1%B6%E5%93%A5/
 http://example.com/categories/%E6%9E%B6%E6%9E%84/
+http://example.com/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/
+http://example.com/categories/Docker/
+http://example.com/categories/%E6%A1%B6%E6%96%87/
