@@ -1,3 +1,4 @@
+http://example.com/post/%E4%BA%BA%E7%94%9F%E6%B2%A1%E6%9C%89%E6%A0%87%E5%87%86%E7%AD%94%E6%A1%88.html
 http://example.com/apps/claude-code-prompt/index.html
 http://example.com/post/110%E6%B0%B8%E8%BF%9C%E5%B9%B2%E4%B8%8D%E7%BF%BB985.html
 http://example.com/post/Docker%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html
@@ -187,6 +188,7 @@ http://example.com/tags/TDesign/
 http://example.com/tags/AI-Chat/
 http://example.com/tags/Vue-3/
 http://example.com/tags/%E9%9D%A2%E8%AF%95/
+http://example.com/tags/%E6%BC%94%E8%AE%B2/
 http://example.com/categories/AI/
 http://example.com/categories/%E8%81%8C%E5%9C%BA/
 http://example.com/categories/Claude-Code/
