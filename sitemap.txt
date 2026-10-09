@@ -1,4 +1,6 @@
 http://example.com/apps/claude-code-prompt/index.html
+http://example.com/post/Redis-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3.html
+http://example.com/post/2026%20%E5%B9%B4%E5%89%8D%E7%AB%AF%20UI%20%E7%BB%84%E4%BB%B6%E5%BA%93%E7%B2%BE%E9%80%89.html
 http://example.com/post/%E5%90%8D%E6%A0%A1%E7%94%9F%E7%9A%84%E9%A1%B6%E7%BA%A7%E8%83%BD%E5%8A%9B%E7%A1%AE%E5%AE%9E%E6%98%AF%E5%B0%8F%E4%BD%9C%E6%96%87.html
 http://example.com/post/%E7%AC%AC%E4%B8%80%E4%BB%BD%E5%B7%A5%E4%BD%9C.html
 http://example.com/post/%E4%BB%AA%E5%BC%8F%E4%BB%A3%E6%9B%BF%E4%B8%8D%E4%BA%86%E7%9C%9F%E5%AE%9E.html
@@ -193,6 +195,9 @@ http://example.com/tags/AI-Chat/
 http://example.com/tags/Vue-3/
 http://example.com/tags/%E9%9D%A2%E8%AF%95/
 http://example.com/tags/%E6%BC%94%E8%AE%B2/
+http://example.com/tags/Redis/
+http://example.com/tags/%E7%BC%93%E5%AD%98/
+http://example.com/tags/React/
 http://example.com/categories/AI/
 http://example.com/categories/%E8%81%8C%E5%9C%BA/
 http://example.com/categories/Claude-Code/
@@ -220,3 +225,5 @@ http://example.com/categories/Docker/
 http://example.com/categories/%E6%A1%B6%E6%96%87/
 http://example.com/categories/AG-UI/
 http://example.com/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/
+http://example.com/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/
+http://example.com/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/%E4%B8%AD%E9%97%B4%E4%BB%B6/
